@@ -7,11 +7,10 @@ export default async function AdminDashboard() {
 
 
     // Safe DB Calls
-    const activeCount = 0;
-    const pendingCount = 0;
-    const dbError = null;
+    let activeCount = 0;
+    let pendingCount = 0;
+    let dbError = null;
 
-    /* TEMPORARILY DISABLED FOR DEBUGGING VERCEL CONNECTION
     try {
         activeCount = await prisma.raffle.count({
             where: { status: 'OPEN' }
@@ -26,7 +25,6 @@ export default async function AdminDashboard() {
         console.error("Dashboard DB Error:", e);
         dbError = e.message || "Erro ao conectar ao banco de dados";
     }
-    */
 
     const expiringTodayCount = 0;
 
