@@ -29,7 +29,7 @@ model Raffle {
 model Ticket {
   id        String   @id @default(uuid())
   raffleId  String
-  raffle    Raffle   @relation(fields: [raffleId], references: [id])
+  raffle    Raffle   @relation(fields: [raffleId], references: [id], onDelete: Cascade)
   name      String
   email     String
   phone     String

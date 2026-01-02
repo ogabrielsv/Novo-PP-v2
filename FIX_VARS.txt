@@ -1,0 +1,20 @@
+⚠️ AÇÃO NECESSÁRIA NO PAINEL DA VERCEL ⚠️
+
+O erro "Configuração Pendente" confirma que as chaves do Supabase não estão configuradas no seu projeto na Vercel.
+
+Siga estes passos exatos:
+
+1. Abra o arquivo .env no seu computador (na pasta do projeto).
+2. Copie o valor de NEXT_PUBLIC_SUPABASE_URL.
+3. Vá no Painel da Vercel > Settings > Environment Variables.
+4. Adicione uma nova variável:
+   - Key: NEXT_PUBLIC_SUPABASE_URL
+   - Value: (Cole o valor do seu .env)
+5. Repita para a chave ANON:
+   - Key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+   - Value: (Cole o valor da NEXT_PUBLIC_SUPABASE_ANON_KEY do seu .env)
+6. IMPORTANTE: Após adicionar as variáveis, você deve ir em "Deployments" e clicar em "Redeploy" no último deploy (ou fazer um novo git push) para que as mudanças surtam efeito.
+
+Sem isso, o sistema não tem como se conectar ao login.
+
+Se você não tiver o arquivo .env, as chaves estão no painel do Supabase (Settings > API).

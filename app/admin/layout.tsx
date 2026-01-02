@@ -47,7 +47,7 @@ export default function AdminLayout({
             <aside className="w-64 bg-stone-950 border-r border-stone-800 fixed h-full z-10 hidden md:flex flex-col">
                 <div className="p-6 border-b border-stone-800">
                     <h1 className="text-xl font-bold text-white tracking-tight">
-                        Painel de <span className="text-blue-600">Controle</span>
+                        Play <span className="text-blue-600">Prêmios</span>
                     </h1>
                 </div>
 
@@ -64,7 +64,7 @@ export default function AdminLayout({
                                         <Link
                                             key={item.href}
                                             href={item.href}
-                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl ${isActive
                                                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
                                                 : 'text-stone-400 hover:text-white hover:bg-stone-900'
                                                 }`}
@@ -90,7 +90,7 @@ export default function AdminLayout({
                 <div className="p-4 border-t border-stone-800">
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-stone-400 hover:text-red-400 hover:bg-red-950/20 transition-all"
+                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-stone-400 hover:text-red-400 hover:bg-red-950/20"
                     >
                         <LogOut className="w-5 h-5" />
                         <span className="font-medium">Sair</span>
