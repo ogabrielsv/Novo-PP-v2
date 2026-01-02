@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 import { updateRaffle } from '@/app/admin/raffles/actions';
-import { ArrowLeft, Save, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 

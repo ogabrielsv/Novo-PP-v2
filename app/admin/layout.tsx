@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Gift, Users, Settings, LogOut } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Gift, Settings, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/app/auth/actions';
 
@@ -12,7 +12,7 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const router = useRouter();
+
 
     // Don't show layout on login page
     if (pathname === '/admin/login') {

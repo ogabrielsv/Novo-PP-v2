@@ -15,7 +15,7 @@ const BRAZIL_STATES = [
 
 export function ParticipationForm({ raffleId }: ParticipationFormProps) {
     const [isLoading, setIsLoading] = useState(false);
-    const [success, setSuccess] = useState<any>(null);
+    const [success, setSuccess] = useState<{ number: string | number } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,8 +51,12 @@ export function ParticipationForm({ raffleId }: ParticipationFormProps) {
                 origin: { y: 0.6 }
             });
 
-        } catch (error: any) {
-            toast.error(error.message);
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Ocorreu um erro desconhecido');
+            }
         } finally {
             setIsLoading(false);
         }

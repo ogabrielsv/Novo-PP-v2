@@ -53,7 +53,7 @@ export default async function HomePage() {
               <p className="text-stone-500">Nenhum sorteio ativo no momento.</p>
             </div>
           ) : (
-            raffles.map((raffle: any) => (
+            raffles.map((raffle) => (
               <Link
                 key={raffle.id}
                 href={`/raffle/${raffle.id}`}

@@ -4,10 +4,7 @@ import { Calendar, Clock, AlertCircle } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
-    const now = new Date();
-    const todayStart = new Date(now.setHours(0, 0, 0, 0));
-    const todayEnd = new Date(now.setHours(23, 59, 59, 999));
-    const next7Days = new Date(now.setDate(now.getDate() + 7));
+
 
     // 1. Active Campaigns
     const activeCount = await prisma.raffle.count({

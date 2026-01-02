@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { Plus, Gift, Search } from 'lucide-react';
-import { RaffleListItem } from './components/RaffleListItem';
+import { RaffleListItem, Raffle } from './components/RaffleListItem';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,8 +50,8 @@ export default async function RafflesPage() {
                         <p className="text-stone-500">Nenhuma campanha encontrada.</p>
                     </div>
                 ) : (
-                    raffles.map((raffle: any) => (
-                        <RaffleListItem key={raffle.id} raffle={raffle} />
+                    raffles.map((raffle) => (
+                        <RaffleListItem key={raffle.id} raffle={raffle as unknown as Raffle} />
                     ))
                 )}
             </div>

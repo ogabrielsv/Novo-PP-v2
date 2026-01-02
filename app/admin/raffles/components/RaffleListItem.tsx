@@ -6,8 +6,20 @@ import { Gift, Link as LinkIcon, Users, Edit, Trash2, Check } from 'lucide-react
 import { toast } from 'sonner';
 import { deleteRaffle } from '@/app/admin/raffles/actions';
 
+export interface Raffle {
+    id: string;
+    name: string;
+    description: string | null;
+    price: number;
+    imageUrl: string | null;
+    status: string;
+    _count: {
+        tickets: number;
+    };
+}
+
 interface RaffleListItemProps {
-    raffle: any; // Using any for simplicity as per previous context, usually strict type
+    raffle: Raffle;
 }
 
 export function RaffleListItem({ raffle }: RaffleListItemProps) {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
+import { Ticket } from '@prisma/client';
 
 // Schema Validation
 const participateSchema = z.object({
@@ -14,7 +15,7 @@ const participateSchema = z.object({
 const MAILTRAP_TOKEN = '28fe8c1b84b793160321ebc1fb405d2a';
 const MAILTRAP_ENDPOINT = 'https://send.api.mailtrap.io/api/send';
 
-async function sendToMailtrap(ticket: any, raffleName: string) {
+async function sendToMailtrap(ticket: Ticket, raffleName: string) {
     try {
         const payload = {
             from: {

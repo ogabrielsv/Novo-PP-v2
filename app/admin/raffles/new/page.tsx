@@ -38,7 +38,7 @@ export default function NewRafflePage() {
             toast.success('Sorteio criado com sucesso!');
             router.push('/admin/raffles');
             router.refresh();
-        } catch (error) {
+        } catch {
             toast.error('Erro ao criar sorteio. Tente novamente.');
         } finally {
             setLoading(false);
