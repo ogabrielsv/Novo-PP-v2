@@ -16,16 +16,23 @@ function LoginForm() {
         toast.error(error);
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         setLoading(true);
-        // Let the browser handle standard submission to the server action, 
-        // but we set loading state for UX. 
-        // Note: In Next 15/16 with Server Actions, usually we use useActionState 
-        // or just form action, but standard onSubmit works for simple cases too if we pass formData.
+
+        const formData = new FormData(e.currentTarget);
+        // We import the action but invoke it manually to handle errors better
+        try {
+            await login(formData);
+        } catch (err) {
+            console.error(err);
+            toast.error("Erro ao tentar fazer login. Tente novamente.");
+            setLoading(false);
+        }
     };
 
     return (
-        <form action={login} onSubmit={() => setLoading(true)} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
                 <label className="text-sm font-medium text-stone-300 ml-1">
                     Email
