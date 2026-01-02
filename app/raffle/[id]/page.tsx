@@ -20,7 +20,15 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
     }
 
     return (
-        <div className="min-h-screen bg-[#3b82f6] flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Liquid Blue Background */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_#3b82f6_0%,_#1d4ed8_50%,_#1e3a8a_100%)] opacity-80"></div>
+                <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.4)_0%,_transparent_50%)] animate-pulse-slow"></div>
+                <div className="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(96,165,250,0.3)_0%,_transparent_50%)] animate-pulse-slower"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+            </div>
+
             {/* Background Effect */}
             <EmojiRain />
 
