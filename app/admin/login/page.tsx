@@ -1,17 +1,17 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // Added useRouter
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import { login } from '@/app/auth/actions';
+import { createClient } from '@/utils/supabase/client'; // Import Client Creation
 
 function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false); // Restored state
+    const [loading, setLoading] = useState(false);
 
     if (error) {
         toast.error(error);
@@ -22,19 +22,30 @@ function LoginForm() {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+
         try {
-            const result = await login(formData);
-            if (result?.error) {
-                toast.error(result.error);
+            // LOGIN 100% CLIENT-SIDE (Sem Server Actions)
+            const supabase = createClient();
+
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                console.error("Login Error:", error);
+                toast.error(error.message || "Erro ao fazer login");
                 setLoading(false);
-            } else if (result?.success) {
+            } else {
                 toast.success('Login realizado com sucesso!');
-                // Force hard navigation to ensure clean state load
+                // Hard navigation to dashboard
                 window.location.href = '/admin/dashboard';
             }
         } catch (err) {
             console.error(err);
-            toast.error("Erro desconhecido. Tente novamente.");
+            toast.error("Erro inesperado. Verifique o console.");
             setLoading(false);
         }
     };
