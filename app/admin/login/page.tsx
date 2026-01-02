@@ -29,7 +29,8 @@ function LoginForm() {
                 setLoading(false);
             } else if (result?.success) {
                 toast.success('Login realizado com sucesso!');
-                router.push('/admin/dashboard');
+                // Force hard navigation to ensure clean state load
+                window.location.href = '/admin/dashboard';
             }
         } catch (err) {
             console.error(err);
