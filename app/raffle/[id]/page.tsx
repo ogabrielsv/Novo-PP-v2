@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import { ParticipationForm } from './components/ParticipationForm';
+import { EmojiRain } from './components/EmojiRain';
 import { Gift } from 'lucide-react';
 
 export default async function RafflePage({ params }: { params: Promise<{ id: string }> }) {
@@ -19,9 +20,12 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
     }
 
     return (
-        <div className="min-h-screen bg-[#3b82f6] flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[#3b82f6] flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Effect */}
+            <EmojiRain />
+
             {/* Centered Squeeze Card */}
-            <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden z-10">
 
                 {/* Header Icon/Image */}
                 <div className="flex flex-col items-center text-center space-y-4 mb-6">
