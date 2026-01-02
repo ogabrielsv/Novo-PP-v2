@@ -8,9 +8,16 @@ export async function updateSession(request: NextRequest) {
         },
     })
 
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        // If env vars are missing, just return the response without supabase auth to avoid crashing the whole site
+        // Ideally we should log this, but console.log might not be visible in edge runtime easily
+        console.error("Missing Supabase Environment Variables");
+        return response;
+    }
+
     const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         {
             cookies: {
                 getAll() {
