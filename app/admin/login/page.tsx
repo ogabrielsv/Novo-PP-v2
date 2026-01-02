@@ -1,16 +1,17 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'; // Added useRouter
 import { toast } from 'sonner';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { login } from '@/app/auth/actions';
 
 function LoginForm() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const error = searchParams.get('error');
     const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // Restored state
 
     if (error) {
         toast.error(error);
@@ -21,12 +22,18 @@ function LoginForm() {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        // We import the action but invoke it manually to handle errors better
         try {
-            await login(formData);
+            const result = await login(formData);
+            if (result?.error) {
+                toast.error(result.error);
+                setLoading(false);
+            } else if (result?.success) {
+                toast.success('Login realizado com sucesso!');
+                router.push('/admin/dashboard');
+            }
         } catch (err) {
             console.error(err);
-            toast.error("Erro ao tentar fazer login. Tente novamente.");
+            toast.error("Erro desconhecido. Tente novamente.");
             setLoading(false);
         }
     };

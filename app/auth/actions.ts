@@ -16,11 +16,11 @@ export async function login(formData: FormData) {
     })
 
     if (error) {
-        redirect('/admin/login?error=Invalid credentials')
+        return { error: error.message }
     }
 
     revalidatePath('/admin', 'layout')
-    redirect('/admin/dashboard')
+    return { success: true }
 }
 
 export async function logout() {
