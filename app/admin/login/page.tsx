@@ -13,8 +13,26 @@ function LoginForm() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    // Check Config State
+    const hasEnvVars = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
     if (error) {
         toast.error(error);
+    }
+
+    // Show visual warning if config is missing
+    if (!hasEnvVars) {
+        return (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-6 rounded-xl text-sm mb-6 max-w-md mx-auto">
+                <h3 className="font-bold text-lg mb-2">Configuração Pendente!</h3>
+                <p className="mb-4">As variáveis de ambiente do Supabase não foram encontradas.</p>
+                <div className="bg-black/50 p-4 rounded-lg font-mono text-xs overflow-x-auto space-y-2">
+                    <p>Adicione estas variáveis no Painel da Vercel:</p>
+                    <p className="text-yellow-500">NEXT_PUBLIC_SUPABASE_URL</p>
+                    <p className="text-yellow-500">NEXT_PUBLIC_SUPABASE_ANON_KEY</p>
+                </div>
+            </div>
+        );
     }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
