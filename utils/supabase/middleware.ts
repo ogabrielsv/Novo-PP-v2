@@ -2,56 +2,11 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
-    let response = NextResponse.next({
+    // Simplified Middleware to prevent Vercel Edge Runtime 500 Errors
+    // We will handle Auth protection in the Server Components (files in app/admin/...)
+    return NextResponse.next({
         request: {
             headers: request.headers,
         },
-    })
-
-    // Defensive check for Environment Variables
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        console.error("Middleware Warning: Supabase environment variables are missing.");
-        return response; // Bypass middleware to avoid crash
-    }
-
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        {
-            cookies: {
-                getAll() {
-                    return request.cookies.getAll()
-                },
-                setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-                    response = NextResponse.next({
-                        request: {
-                            headers: request.headers,
-                        },
-                    })
-                    cookiesToSet.forEach(({ name, value, options }) =>
-                        response.cookies.set(name, value, options)
-                    )
-                },
-            },
-        }
-    )
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
-
-    if (
-        request.nextUrl.pathname.startsWith('/admin') &&
-        !request.nextUrl.pathname.startsWith('/admin/login') &&
-        !user
-    ) {
-        return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
-
-    if (request.nextUrl.pathname === '/admin/login' && user) {
-        return NextResponse.redirect(new URL('/admin/dashboard', request.url))
-    }
-
-    return response
+    });
 }

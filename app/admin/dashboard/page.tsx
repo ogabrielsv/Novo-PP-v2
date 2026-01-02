@@ -1,10 +1,18 @@
 import { prisma } from '@/lib/db';
 import { Calendar, Clock, AlertCircle } from 'lucide-react';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
+    // Server-Side Auth Check (Replaces Middleware check)
+    const supabase = await createClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
 
+    if (!user || error) {
+        redirect('/admin/login');
+    }
 
     // Safe DB Calls
     let activeCount = 0;
