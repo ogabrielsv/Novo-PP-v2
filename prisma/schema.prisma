@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+}
+
+model Raffle {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  imageUrl    String?
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tickets     Ticket[]
+}
+
+model Ticket {
+  id        String   @id @default(uuid())
+  raffleId  String
+  raffle    Raffle   @relation(fields: [raffleId], references: [id])
+  name      String
+  email     String
+  phone     String
+  state     String?
+  ipAddress String?
+  number    Int?
+  createdAt DateTime @default(now())
+
+  @@index([raffleId])
+}

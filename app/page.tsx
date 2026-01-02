@@ -1,65 +1,107 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { prisma } from '@/lib/db';
+import { Ticket, ArrowRight, Gift } from 'lucide-react';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const raffles = await prisma.raffle.findMany({
+    where: { status: 'OPEN' },
+    orderBy: { createdAt: 'desc' },
+  });
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-black text-white font-sans">
+      {/* Navbar */}
+      <nav className="border-b border-stone-900 bg-black/50 backdrop-blur-md sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="text-xl font-bold tracking-tight">
+            Play<span className="text-blue-600">Prêmios</span>
+          </div>
+          <Link
+            href="/admin/login"
+            className="text-sm font-medium text-stone-400 hover:text-white transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Área Admin
+          </Link>
         </div>
-      </main>
+      </nav>
+
+      {/* Hero Section */}
+      <div className="py-20 px-6 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tighter mb-6 bg-gradient-to-br from-white to-stone-500 bg-clip-text text-transparent">
+          Prêmios Exclusivos
+          <br />
+          <span className="text-blue-600">Ao Seu Alcance</span>
+        </h1>
+        <p className="text-stone-400 text-lg max-w-2xl mx-auto mb-10">
+          Participe dos nossos sorteios e concorra a prêmios incríveis.
+          Segurança, transparência e chances reais de ganhar.
+        </p>
+      </div>
+
+      {/* Raffles Grid */}
+      <div className="max-w-6xl mx-auto px-6 pb-20">
+        <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
+          <Gift className="text-blue-500" />
+          Sorteios Ativos
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {raffles.length === 0 ? (
+            <div className="col-span-full py-16 text-center border border-stone-900 rounded-2xl bg-stone-950">
+              <p className="text-stone-500">Nenhum sorteio ativo no momento.</p>
+            </div>
+          ) : (
+            raffles.map((raffle: any) => (
+              <Link
+                key={raffle.id}
+                href={`/raffle/${raffle.id}`}
+                className="group bg-stone-950 border border-stone-900 rounded-2xl overflow-hidden hover:border-blue-800 transition-all hover:scale-[1.01] hover:shadow-2xl hover:shadow-blue-900/10"
+              >
+                <div className="aspect-video bg-stone-900 relative">
+                  {raffle.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={raffle.imageUrl}
+                      alt={raffle.name}
+                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-stone-800">
+                      <Gift className="w-12 h-12" />
+                    </div>
+                  )}
+                  <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                    R$ {raffle.price.toFixed(2)}
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
+                    {raffle.name}
+                  </h3>
+                  <p className="text-stone-500 text-sm line-clamp-2 mb-6">
+                    {raffle.description || 'Sem descrição.'}
+                  </p>
+
+                  <div className="flex items-center justify-between text-sm font-medium">
+                    <div className="flex items-center gap-2 text-stone-400">
+                      <Ticket className="w-4 h-4" />
+                      Participar
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-blue-500 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
+      </div>
+
+      <footer className="border-t border-stone-900 py-12 text-center text-stone-600 text-sm">
+        <p>&copy; {new Date().getFullYear()} PlayPrêmios. Todos os direitos reservados.</p>
+      </footer>
     </div>
   );
 }
