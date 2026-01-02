@@ -6,27 +6,35 @@ export const dynamic = 'force-dynamic';
 export default async function AdminDashboard() {
 
 
-    // 1. Active Campaigns
-    const activeCount = await prisma.raffle.count({
-        where: { status: 'OPEN' }
-    });
+    // Safe DB Calls
+    let activeCount = 0;
+    let pendingCount = 0;
+    let dbError = null;
 
-    // 2. Expiring Today (Mocking logic: createdAt + some duration or just created today for now if no expiry field.
-    // Actually, I don't have an `expiresAt` field in Schema yet. I'll mock it based on createdAt or just return 0 for now).
-    // TODO: Add expiresAt to Schema in future.
+    try {
+        activeCount = await prisma.raffle.count({
+            where: { status: 'OPEN' }
+        });
+
+        pendingCount = await prisma.raffle.count({
+            where: {
+                status: { not: 'OPEN' }
+            }
+        });
+    } catch (e: any) {
+        console.error("Dashboard DB Error:", e);
+        dbError = e.message || "Erro ao conectar ao banco de dados";
+    }
+
     const expiringTodayCount = 0;
-
-    // 3. Pending (Closed but no winner selected?)
-    // Assuming 'CLOSED' status exists or similar. 
-    const pendingCount = await prisma.raffle.count({
-        where: {
-            status: { not: 'OPEN' }
-            // AND winnerId is null (if I had that field)
-        }
-    });
 
     return (
         <div className="space-y-8">
+            {dbError && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-sm mb-6">
+                    <strong>Erro de Conexão:</strong> {dbError}
+                </div>
+            )}
             <div>
                 <h2 className="text-2xl font-bold text-white">Dashboard Admin</h2>
                 <p className="text-stone-400">Visão geral das campanhas</p>
