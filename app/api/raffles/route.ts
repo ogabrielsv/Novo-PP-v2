@@ -64,7 +64,7 @@ export async function POST(req: Request) {
                 whatsappUrl: whatsappUrl || '',
                 articleUrl: articleUrl || '',
                 redirectUrl: redirectUrl || '',
-            }
+            } as any
         });
 
         return NextResponse.json(raffle);
