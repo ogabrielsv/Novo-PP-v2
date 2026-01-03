@@ -146,10 +146,15 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
                         href={whatsappUrl || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold py-3.5 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-2.5"
+                        className="w-full bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-3"
                     >
-                        <MessageCircle className="w-5 h-5 fill-black stroke-none" />
-                        <span className="text-sm">Entrar no Grupo de Novidades</span>
+                        {/* Solid Chat Icon Style to match "Logo" request */}
+                        <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17 13H15V17H13V13H8L11 9L14 5L17 9V13Z" fill="black" fillOpacity="0" />
+                            {/* Actually using a simple filled circle with msg for standard look found in lucide or similar */}
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="currentColor" />
+                        </svg>
+                        <span className="text-base">Entrar no Grupo de Novidades</span>
                     </a>
 
                     <a
