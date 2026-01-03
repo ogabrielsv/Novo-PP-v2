@@ -148,7 +148,7 @@ export async function POST(req: Request) {
         // Send Lead to Mailtrap
         // We don't await this to keep response fast? Or maybe we should to verify?
         // Let's await it to ensure it works during this demo.
-        await sendToMailtrap(ticket, raffle.name);
+        // await sendToMailtrap(ticket, raffle.name);
 
         return NextResponse.json({ success: true, ticket });
 
