@@ -88,56 +88,69 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
 
     if (success) {
         return (
-            <div className="bg-black border border-stone-800 rounded-3xl p-8 text-center space-y-8 animate-in fade-in zoom-in duration-300 relative overflow-hidden">
+            <div className="bg-black border border-stone-800 rounded-3xl p-8 text-center space-y-6 animate-in fade-in zoom-in duration-300 relative overflow-hidden ring-1 ring-white/10">
                 {/* Background Glow */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-green-500/10 blur-[60px] pointer-events-none"></div>
 
-                {/* Success Icon */}
-                <div className="relative z-10">
-                    <div className="w-24 h-24 bg-stone-900 rounded-full flex items-center justify-center mx-auto shadow-2xl border border-stone-800 mb-6 relative">
-                        <div className="absolute top-0 right-0 bg-green-500 rounded-full p-1.5 border-4 border-black">
-                            <Check className="w-4 h-4 text-black font-bold" />
-                        </div>
-                        <Gift className="w-10 h-10 text-green-500" />
+                {/* Top Right Checkmark */}
+                <div className="absolute top-4 right-4">
+                    <div className="bg-[#4ADE80] rounded-full p-1.5 shadow-lg shadow-green-900/20">
+                        <Check className="w-4 h-4 text-black stroke-[3]" />
                     </div>
                 </div>
 
-                <div className="space-y-4 relative z-10">
-                    <div className="flex items-center justify-center gap-2 text-2xl font-bold text-white">
-                        <span>🎉</span>
-                        <h2>Parabéns!</h2>
+                {/* Main Icon */}
+                <div className="relative z-10 pt-2">
+                    <div className="w-20 h-20 bg-stone-900/80 rounded-full flex items-center justify-center mx-auto shadow-2xl border border-stone-800 backdrop-blur-sm">
+                        <Gift className="w-10 h-10 text-[#4ADE80]" strokeWidth={1.5} />
                     </div>
+                </div>
 
-                    <div className="bg-stone-900/50 border border-stone-800 rounded-xl p-6 space-y-4">
-                        <div className="flex justify-center">
-                            <div className="bg-green-500/10 text-green-400 p-3 rounded-full">
-                                <MessageCircle className="w-6 h-6" />
-                            </div>
+                {/* Title */}
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                    <span className="text-2xl">🎉</span>
+                    <h2 className="text-2xl font-bold text-white tracking-tight">Parabéns!</h2>
+                </div>
+
+                {/* Info Box */}
+                <div className="relative z-10 bg-stone-900/40 border border-stone-800/60 rounded-xl p-5 space-y-4 backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-3">
+                        <div className="text-[#4ADE80]">
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
                         </div>
+
                         <div className="space-y-2">
-                            <p className="text-stone-300 font-medium">
+                            <p className="text-stone-300 font-medium text-sm">
                                 Sua participação foi confirmada com sucesso!
                             </p>
-                            <p className="text-xs text-stone-500 leading-relaxed">
-                                ✉️ Não esqueça de verificar sua caixa de spam e a aba de promoções.
-                            </p>
-                            <div className="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded-full text-xs font-semibold border border-yellow-500/20">
-                                🏆 Elegível para sorteio oficial
+                            <div className="flex items-start justify-center gap-2 text-xs text-stone-500 max-w-[280px] mx-auto text-left bg-black/20 p-2 rounded-lg">
+                                <span className="opacity-70 mt-0.5">⚠️</span>
+                                <span className="leading-relaxed">
+                                    Não esqueça de verificar sua caixa de <strong className="text-stone-400">spam</strong> e a aba de <strong className="text-stone-400">promoções</strong>.
+                                </span>
                             </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-xs font-bold tracking-wide uppercase">
+                            <span className="text-sm">🏆</span>
+                            Elegível para sorteio oficial
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-3 relative z-10">
+                {/* Buttons */}
+                <div className="space-y-3 relative z-10 pt-2">
                     {whatsappUrl && (
                         <a
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full block bg-[#25D366] hover:bg-[#20bd5a] text-black font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-3"
+                            className="w-full bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold py-3.5 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-2.5"
                         >
-                            <MessageCircle className="w-5 h-5" />
-                            Entrar no Grupo de Novidades
+                            <MessageCircle className="w-5 h-5 fill-black stroke-none" />
+                            <span className="text-sm">Entrar no Grupo de Novidades</span>
                         </a>
                     )}
 
@@ -145,14 +158,14 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
                         href="https://instagram.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full block bg-stone-900 hover:bg-stone-800 text-white font-semibold py-4 rounded-xl border border-stone-800 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3"
+                        className="w-full bg-transparent hover:bg-stone-900 border border-stone-700 text-white font-semibold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2.5 group"
                     >
-                        <Instagram className="w-5 h-5" />
-                        Siga-nos no Instagram
+                        <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm">Siga-nos no Instagram</span>
                     </a>
                 </div>
 
-                <p className="text-xs text-stone-500 relative z-10">
+                <p className="text-[10px] text-stone-600 relative z-10 max-w-[250px] mx-auto leading-relaxed">
                     Boa sorte! 🍀 Você receberá um e-mail de confirmação em breve.
                 </p>
             </div>
