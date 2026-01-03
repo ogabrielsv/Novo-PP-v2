@@ -142,17 +142,15 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
 
                 {/* Buttons */}
                 <div className="space-y-3 relative z-10 pt-2">
-                    {whatsappUrl && (
-                        <a
-                            href={whatsappUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold py-3.5 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-2.5"
-                        >
-                            <MessageCircle className="w-5 h-5 fill-black stroke-none" />
-                            <span className="text-sm">Entrar no Grupo de Novidades</span>
-                        </a>
-                    )}
+                    <a
+                        href={whatsappUrl || '#'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold py-3.5 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-green-900/20 flex items-center justify-center gap-2.5"
+                    >
+                        <MessageCircle className="w-5 h-5 fill-black stroke-none" />
+                        <span className="text-sm">Entrar no Grupo de Novidades</span>
+                    </a>
 
                     <a
                         href="https://instagram.com"
