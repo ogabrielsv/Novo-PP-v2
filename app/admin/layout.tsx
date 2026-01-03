@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Gift, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Gift, Settings, LogOut, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { logout } from '@/app/auth/actions';
 
@@ -35,7 +35,7 @@ export default function AdminLayout({
         {
             title: 'ADMINISTRAÇÃO',
             items: [
-                { name: 'Relatórios', href: '/admin/dashboard', icon: LayoutDashboard }, // Placeholder
+                { name: 'Relatórios', href: '/admin/reports', icon: BarChart3 },
                 { name: 'Configurações', href: '/admin/settings', icon: Settings },
             ]
         }

@@ -10,64 +10,37 @@ import {
     RefreshCw,
     Calendar,
     Search,
-    BarChart3,
-    ArrowLeft,
-    Ticket,
-    User
+    BarChart3
 } from 'lucide-react';
-import Link from 'next/link';
 
-interface Props {
-    params: {
-        id: string;
-    };
-    // Mocking data for now as we transition the view
-    // In a real Server Component we'd pass data, but we can fetch or receive via props
-    raffle?: any; // To be populated
-    tickets?: any[];
-}
-
-// We'll make this a Client Component to handle state easily as requested
-// But data fetching should ideally be server-side. 
-// For this quick visual update, we will assume data comes in or we mock it for the "visual match".
-// The user asked strictly for the "info present in the image".
-
-export default function ParticipantsPage({ params }: any) {
+export default function ReportsPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
 
-    // These stats represent the "metrics" from the image
-    // tailored to the raffle
+    // Mock data based on user request (functional UI first)
+    // In a real implementation, these would come from the server
     const stats = {
         blockedIps: 0,
         suspicious: 0,
-        trustedIps: 342, // Mock number
-        auditLogs: 12
+        trustedIps: 2, // Matches image
+        auditLogs: 0
     };
 
     const handleRefresh = async () => {
         setIsLoading(true);
+        // Simulate data fetch
         await new Promise(resolve => setTimeout(resolve, 1000));
         setIsLoading(false);
     };
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Header with Back Button */}
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <Link
-                        href="/admin/raffles"
-                        className="p-2 hover:bg-stone-900 rounded-lg text-stone-400 hover:text-white transition-colors"
-                    >
-                        <ArrowLeft className="w-6 h-6" />
-                    </Link>
-                    <div>
-                        <h1 className="text-3xl font-bold text-white tracking-tight">Participantes</h1>
-                        <p className="text-stone-400 mt-1">Gestão e análise de participantes</p>
-                    </div>
+                <div>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">Relatórios do Sistema</h1>
+                    <p className="text-stone-400 mt-1">Monitoramento e análise completa do sistema</p>
                 </div>
-
                 <button
                     onClick={handleRefresh}
                     disabled={isLoading}
@@ -179,16 +152,13 @@ export default function ParticipantsPage({ params }: any) {
                 </div>
             </div>
 
-            {/* List Placeholder - To verify "all information in image" we stick to the image layout, but I will add the list below for usefulness */}
-            <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center text-stone-500 mt-6 md:mt-8">
-                <div className="flex flex-col items-center justify-center space-y-4">
-                    <div className="w-16 h-16 bg-stone-950 rounded-full flex items-center justify-center">
-                        <User className="w-8 h-8 text-stone-600" />
-                    </div>
-                    <h3 className="text-lg font-medium text-white">Lista de Participantes</h3>
-                    <p className="max-w-md mx-auto">A visualização detalhada dos participantes está disponível na aba "Auditoria" ou será carregada aqui em breve.</p>
+            {/* Empty State / Placeholder for selected tab content */}
+            {activeTab !== 'overview' && (
+                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-12 text-center text-stone-500">
+                    <Database className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p>Nenhum dado encontrado para este período.</p>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
