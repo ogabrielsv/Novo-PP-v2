@@ -1,59 +1,29 @@
-'use client';
-
-import { useState } from 'react';
-import {
-    LayoutDashboard,
-    Shield,
-    AlertTriangle,
-    CheckCircle,
-    Database,
-    RefreshCw,
-    Calendar,
-    Search,
-    BarChart3,
-    ArrowLeft,
-    Ticket,
-    User
-} from 'lucide-react';
+import { prisma } from '@/lib/db';
+import { ArrowLeft, Download, Search } from 'lucide-react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
-interface Props {
-    params: {
-        id: string;
-    };
-    // Mocking data for now as we transition the view
-    // In a real Server Component we'd pass data, but we can fetch or receive via props
-    raffle?: any; // To be populated
-    tickets?: any[];
-}
+export const dynamic = 'force-dynamic';
 
-// We'll make this a Client Component to handle state easily as requested
-// But data fetching should ideally be server-side. 
-// For this quick visual update, we will assume data comes in or we mock it for the "visual match".
-// The user asked strictly for the "info present in the image".
+export default async function ParticipantsPage({ params }: { params: { id: string } }) {
+    const { id } = await Promise.resolve(params);
 
-export default function ParticipantsPage({ params }: any) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState('overview');
+    const raffle = await prisma.raffle.findUnique({
+        where: { id },
+        include: {
+            tickets: {
+                orderBy: { createdAt: 'desc' }
+            }
+        }
+    });
 
-    // These stats represent the "metrics" from the image
-    // tailored to the raffle
-    const stats = {
-        blockedIps: 0,
-        suspicious: 0,
-        trustedIps: 342, // Mock number
-        auditLogs: 12
-    };
-
-    const handleRefresh = async () => {
-        setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false);
-    };
+    if (!raffle) {
+        redirect('/admin/raffles');
+    }
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Header with Back Button */}
+        <div className="space-y-6 animate-in fade-in duration-500">
+            {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <Link
@@ -63,130 +33,83 @@ export default function ParticipantsPage({ params }: any) {
                         <ArrowLeft className="w-6 h-6" />
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-bold text-white tracking-tight">Participantes</h1>
-                        <p className="text-stone-400 mt-1">Gestão e análise de participantes</p>
+                        <h1 className="text-2xl font-bold text-white tracking-tight">Participantes</h1>
+                        <p className="text-stone-400 text-sm">Visualizando participantes de: <span className="text-[#4ADE80]">{raffle.name}</span></p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Table Card */}
+            <div className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
+                {/* Search / Filter Visual (Functional in future) */}
+                <div className="p-4 border-b border-stone-800 bg-stone-950/50 flex justify-between items-center gap-4">
+                    <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+                        <input
+                            type="text"
+                            placeholder="Buscar por nome, email ou telefone..."
+                            className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-4 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors"
+                        />
+                    </div>
+                    <div className="text-sm text-stone-500">
+                        Total: <span className="text-white font-bold">{raffle.tickets.length}</span>
                     </div>
                 </div>
 
-                <button
-                    onClick={handleRefresh}
-                    disabled={isLoading}
-                    className="flex items-center gap-2 bg-[#4ADE80] hover:bg-[#4ADE80]/90 text-black font-bold px-6 py-2.5 rounded-xl transition-all disabled:opacity-50 active:scale-[0.98]"
-                >
-                    <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
-                    {isLoading ? 'Atualizando...' : 'Atualizar'}
-                </button>
-            </div>
-
-            {/* Controls */}
-            <div className="flex flex-col md:flex-row gap-4">
-                {/* Date Picker (Mock) */}
-                <div className="flex items-center gap-2 bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-stone-300 min-w-[200px]">
-                    <Calendar className="w-5 h-5 text-stone-500" />
-                    <span className="text-sm font-medium">Últimos 30 dias</span>
-                </div>
-
-                {/* Search */}
-                <div className="flex-1 relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-500" />
-                    <input
-                        type="text"
-                        placeholder="Buscar nos relatórios..."
-                        className="w-full bg-stone-900 border border-stone-800 text-white rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:border-[#4ADE80] transition-colors placeholder-stone-600"
-                    />
-                </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="border-b border-stone-800">
-                <div className="flex gap-6 overflow-x-auto">
-                    {[
-                        { id: 'overview', label: 'Visão Geral', icon: BarChart3 },
-                        { id: 'antibot', label: 'Anti-Bot', icon: Shield },
-                        { id: 'ratelimit', label: 'Rate Limiting', icon: AlertTriangle },
-                        { id: 'audit', label: 'Auditoria', icon: Database },
-                    ].map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 pb-4 text-sm font-medium transition-colors relative ${activeTab === tab.id
-                                    ? 'text-[#4ADE80]'
-                                    : 'text-stone-500 hover:text-stone-300'
-                                }`}
-                        >
-                            <tab.icon className="w-4 h-4" />
-                            {tab.label}
-                            {activeTab === tab.id && (
-                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#4ADE80] rounded-t-full" />
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-stone-400">
+                        <thead className="bg-[#111] text-stone-300 font-medium uppercase text-xs tracking-wider border-b border-stone-800">
+                            <tr>
+                                <th className="p-5 font-bold">Nome</th>
+                                <th className="p-5 font-bold">Email</th>
+                                <th className="p-5 font-bold">Telefone</th>
+                                <th className="p-5 font-bold">Estado</th>
+                                <th className="p-5 font-bold">Origem</th>
+                                <th className="p-5 font-bold">Campanha</th>
+                                <th className="p-5 font-bold">Números da Sorte</th>
+                                <th className="p-5 font-bold">Data</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-800/50">
+                            {raffle.tickets.length === 0 ? (
+                                <tr>
+                                    <td colSpan={8} className="p-12 text-center">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <div className="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center text-stone-600">
+                                                <Search className="w-6 h-6" />
+                                            </div>
+                                            <p className="text-stone-500 font-medium">Nenhum participante encontrado.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : (
+                                raffle.tickets.map((ticket) => (
+                                    <tr key={ticket.id} className="hover:bg-stone-800/30 transition-colors group">
+                                        <td className="p-5 font-medium text-white group-hover:text-[#4ADE80] transition-colors">{ticket.name}</td>
+                                        <td className="p-5">{ticket.email}</td>
+                                        <td className="p-5 font-mono text-xs">{ticket.phone}</td>
+                                        <td className="p-5 text-center">
+                                            {ticket.state ? (
+                                                <span className="bg-stone-800 text-stone-300 px-2 py-1 rounded text-xs font-bold">
+                                                    {ticket.state}
+                                                </span>
+                                            ) : '-'}
+                                        </td>
+                                        <td className="p-5 font-mono text-xs text-stone-500">{ticket.ipAddress || 'N/A'}</td>
+                                        <td className="p-5 text-white">{raffle.name}</td>
+                                        <td className="p-5">
+                                            <span className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 px-3 py-1 rounded-full text-xs font-bold font-mono">
+                                                {ticket.number?.toString().padStart(4, '0')}
+                                            </span>
+                                        </td>
+                                        <td className="p-5 text-xs text-stone-500 whitespace-nowrap">
+                                            {new Date(ticket.createdAt).toLocaleDateString('pt-BR')} <span className="opacity-50">às</span> {new Date(ticket.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                        </td>
+                                    </tr>
+                                ))
                             )}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* IPs Bloqueados */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 hover:border-red-500/50 transition-colors group">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="bg-red-500/10 p-3 rounded-xl group-hover:bg-red-500/20 transition-colors">
-                            <Shield className="w-6 h-6 text-red-500" />
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-stone-400 text-sm font-medium">IPs Bloqueados</p>
-                        <h3 className="text-3xl font-bold text-white mt-1">{stats.blockedIps}</h3>
-                    </div>
-                </div>
-
-                {/* Atividades Suspeitas */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 hover:border-yellow-500/50 transition-colors group">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="bg-yellow-500/10 p-3 rounded-xl group-hover:bg-yellow-500/20 transition-colors">
-                            <AlertTriangle className="w-6 h-6 text-yellow-500" />
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-stone-400 text-sm font-medium">Atividades Suspeitas</p>
-                        <h3 className="text-3xl font-bold text-white mt-1">{stats.suspicious}</h3>
-                    </div>
-                </div>
-
-                {/* IPs Confiáveis */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 hover:border-[#4ADE80]/50 transition-colors group">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="bg-[#4ADE80]/10 p-3 rounded-xl group-hover:bg-[#4ADE80]/20 transition-colors">
-                            <CheckCircle className="w-6 h-6 text-[#4ADE80]" />
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-stone-400 text-sm font-medium">IPs Confiáveis</p>
-                        <h3 className="text-3xl font-bold text-white mt-1">{stats.trustedIps}</h3>
-                    </div>
-                </div>
-
-                {/* Registros de Auditoria */}
-                <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 hover:border-blue-500/50 transition-colors group">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="bg-blue-500/10 p-3 rounded-xl group-hover:bg-blue-500/20 transition-colors">
-                            <Database className="w-6 h-6 text-blue-500" />
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-stone-400 text-sm font-medium">Registros de Auditoria</p>
-                        <h3 className="text-3xl font-bold text-white mt-1">{stats.auditLogs}</h3>
-                    </div>
-                </div>
-            </div>
-
-            {/* List Placeholder - To verify "all information in image" we stick to the image layout, but I will add the list below for usefulness */}
-            <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center text-stone-500 mt-6 md:mt-8">
-                <div className="flex flex-col items-center justify-center space-y-4">
-                    <div className="w-16 h-16 bg-stone-950 rounded-full flex items-center justify-center">
-                        <User className="w-8 h-8 text-stone-600" />
-                    </div>
-                    <h3 className="text-lg font-medium text-white">Lista de Participantes</h3>
-                    <p className="max-w-md mx-auto">A visualização detalhada dos participantes está disponível na aba "Auditoria" ou será carregada aqui em breve.</p>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
