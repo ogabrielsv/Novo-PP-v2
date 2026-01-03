@@ -31,7 +31,19 @@ export async function POST(req: Request) {
 
     try {
         const body = await req.json();
-        const { name, description, price, imageUrl } = body;
+        const {
+            name,
+            title,
+            description,
+            price,
+            imageUrl,
+            responsible,
+            startDate,
+            endDate,
+            whatsappUrl,
+            articleUrl,
+            redirectUrl
+        } = body;
 
         // Basic validation
         if (!name) {
@@ -41,10 +53,17 @@ export async function POST(req: Request) {
         const raffle = await prisma.raffle.create({
             data: {
                 name,
+                title: title || '',
                 description: description || '',
                 price: price ? parseFloat(price) : 0.0,
                 imageUrl: imageUrl || '',
-                status: 'OPEN'
+                status: 'OPEN',
+                responsible: responsible || '',
+                startDate: startDate ? new Date(startDate) : null,
+                endDate: endDate ? new Date(endDate) : null,
+                whatsappUrl: whatsappUrl || '',
+                articleUrl: articleUrl || '',
+                redirectUrl: redirectUrl || '',
             }
         });
 

@@ -17,10 +17,19 @@ model Admin {
 model Raffle {
   id          String   @id @default(uuid())
   name        String
+  title       String? // Titulo
   description String
   price       Float
   imageUrl    String?
   status      String   @default("OPEN")
+  
+  responsible String? // Responsável
+  startDate   DateTime? // Data de Início
+  endDate     DateTime? // Data de Expiração
+  whatsappUrl String? // Link do Grupo
+  articleUrl  String? // Link do Artigo
+  redirectUrl String? // Link de Redirecionamento
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   tickets     Ticket[]
