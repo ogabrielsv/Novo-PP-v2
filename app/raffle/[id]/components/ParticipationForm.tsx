@@ -86,6 +86,18 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
         }
     };
 
+    const formatPhone = (value: string) => {
+        return value
+            .replace(/\D/g, '')
+            .replace(/^(\d{2})(\d)/g, '($1) $2')
+            .replace(/(\d)(\d{4})$/, '$1-$2')
+            .slice(0, 15);
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.value = formatPhone(e.target.value);
+    };
+
     if (success) {
         return (
             <div className="bg-black border border-stone-800 rounded-3xl p-8 text-center space-y-6 animate-in fade-in zoom-in duration-300 relative overflow-hidden ring-1 ring-white/10">
@@ -165,6 +177,13 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
                         <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         <span className="text-sm">Siga-nos no Instagram</span>
                     </a>
+
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="w-full pt-2 text-xs text-stone-600 hover:text-stone-400 transition-colors"
+                    >
+                        Participar novamente
+                    </button>
                 </div>
 
                 <p className="text-[10px] text-stone-600 relative z-10 max-w-[250px] mx-auto leading-relaxed">
@@ -182,31 +201,33 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
                         name="name"
                         type="text"
                         required
-                        placeholder="Digite seu nome completo"
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-stone-600 focus:bg-stone-800 transition-all text-sm"
+                        placeholder="Nome completo"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-sm"
                     />
 
                     <input
                         name="email"
                         type="email"
                         required
-                        placeholder="Digite seu melhor e-mail"
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-stone-600 focus:bg-stone-800 transition-all text-sm"
+                        placeholder="Seu melhor e-mail"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-sm"
                     />
 
                     <input
                         name="phone"
                         type="tel"
                         required
-                        placeholder="(11) 99999-9999"
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-stone-600 focus:bg-stone-800 transition-all text-sm"
+                        placeholder="(DDD) 99999-9999"
+                        onChange={handlePhoneChange}
+                        maxLength={15}
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-sm"
                     />
 
                     <select
                         name="state"
                         required
                         defaultValue=""
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-stone-600 focus:bg-stone-800 transition-all text-sm appearance-none cursor-pointer"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-sm appearance-none cursor-pointer"
                     >
                         <option value="" disabled>Selecione seu estado</option>
                         {BRAZIL_STATES.map(state => (
@@ -219,7 +240,7 @@ export function ParticipationForm({ raffleId, whatsappUrl }: ParticipationFormPr
                     <p className="text-xs text-stone-400 font-medium">Aceite obrigatório para participação</p>
                     <label className="flex items-start gap-3 cursor-pointer group">
                         <div className="relative flex items-center">
-                            <input type="checkbox" required className="peer relative appearance-none w-5 h-5 border border-stone-700 rounded bg-transparent checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition-all" />
+                            <input type="checkbox" required className="peer relative appearance-none w-5 h-5 border border-stone-700 rounded bg-transparent checked:bg-blue-600 checked:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all" />
                             <Check className="w-3.5 h-3.5 text-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
                         </div>
                         <span className="text-xs text-stone-500 group-hover:text-stone-400 transition-colors leading-relaxed select-none">
