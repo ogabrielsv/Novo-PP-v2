@@ -38,8 +38,10 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
             email: formData.get('email'),
             phone: formData.get('phone'),
             state: formData.get('state'),
-            utmSource: searchParams.get('utm_source'),
+            utmSource: formData.get('utmSource') || searchParams.get('utm_source'),
         };
+
+        console.log('Enviando dados de participação:', data); // Debug log
 
         try {
             const res = await fetch('/api/participants', {
@@ -287,6 +289,8 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                             <option key={state} value={state}>{state}</option>
                         ))}
                     </select>
+
+                    <input type="hidden" name="utmSource" value={searchParams.get('utm_source') || searchParams.get('utm_source') || ''} />
                 </div>
 
                 <div className="space-y-3 pt-2">
