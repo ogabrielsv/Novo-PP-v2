@@ -42,39 +42,13 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
             {/* Centered Squeeze Card */}
             <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden z-10">
 
-                {/* Header Icon/Image */}
-                <div className="flex flex-col items-center text-center space-y-4 mb-6">
-                    {raffle.imageUrl ? (
-                        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-stone-800 mb-4 shadow-2xl relative group">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={raffle.imageUrl}
-                                alt={raffle.name}
-                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                            />
-                        </div>
-                    ) : (
-                        <div className="w-20 h-20 bg-stone-900 rounded-full flex items-center justify-center border border-stone-800 text-3xl mb-2 shadow-xl">
-                            <Gift className="w-10 h-10 text-blue-500" />
-                        </div>
-                    )}
-
-                    <div className="space-y-2">
-                        <h1 className="text-2xl font-bold text-white leading-tight">
-                            {raffle.name}
-                        </h1>
-                        <p className="text-stone-400 text-sm px-2 leading-relaxed">
-                            {raffle.description || "Participe e concorra a este prêmio incrível."}
-                        </p>
-                    </div>
-                </div>
-
                 {/* Participation Form */}
                 <ParticipationForm
                     raffleId={raffle.id}
                     whatsappUrl={raffle.whatsappUrl}
                     imageUrl={raffle.imageUrl}
+                    name={raffle.name}
+                    description={raffle.description}
                 />
 
             </main>
