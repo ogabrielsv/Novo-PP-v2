@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, Check, X, Shield, Gavel, Gift, Instagram, MessageCircle } from 'lucide-react';
+import { Loader2, Check, X, Shield, Gavel, Gift, Instagram, MessageCircle, RefreshCw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface ParticipationFormProps {
@@ -200,8 +200,9 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
 
                     <button
                         onClick={() => window.location.reload()}
-                        className="w-full pt-2 text-xs text-stone-600 hover:text-stone-400 transition-colors"
+                        className="w-full py-3 mt-1 text-sm text-stone-400 hover:text-white hover:bg-stone-800/50 rounded-xl transition-all flex items-center justify-center gap-2 group border border-transparent hover:border-stone-800"
                     >
+                        <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-700" />
                         Participar novamente
                     </button>
                 </div>
