@@ -29,18 +29,33 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
     const [utmSource, setUtmSource] = useState('');
 
     useEffect(() => {
-        // Try to capture from searchParams first (Next.js way)
+        // 1. Prioridade: Captura UTM da URL (Next.js ou Nativo)
         const fromNext = searchParams.get('utm_source');
         if (fromNext) {
             setUtmSource(fromNext);
             return;
         }
 
-        // Fallback to window.location (Native way)
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
             const source = params.get('utm_source');
-            if (source) setUtmSource(source);
+            if (source) {
+                setUtmSource(source);
+                return;
+            }
+
+            // 2. Fallback Inteligente: Analisa de onde o usuário veio (Referer)
+            const referrer = document.referrer;
+            if (referrer) {
+                if (referrer.includes('instagram.com')) setUtmSource('instagram_organico');
+                else if (referrer.includes('facebook.com')) setUtmSource('facebook_organico');
+                else if (referrer.includes('youtube.com')) setUtmSource('youtube_organico');
+                else if (referrer.includes('twitter.com') || referrer.includes('x.com')) setUtmSource('twitter_organico');
+                else if (referrer.includes('tiktok.com')) setUtmSource('tiktok_organico');
+                else if (referrer.includes('google.com')) setUtmSource('google_organico');
+                else if (referrer.includes('bing.com')) setUtmSource('bing_organico');
+                // Se não for nenhum conhecido, não marca nada ou marca como 'site_externo'
+            }
         }
     }, [searchParams]);
 
