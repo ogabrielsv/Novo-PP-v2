@@ -11,6 +11,7 @@ const participateSchema = z.object({
     email: z.string().email(),
     phone: z.string().min(10), // Basic length check
     state: z.string().length(2),
+    utmSource: z.string().optional().nullable(),
 });
 
 async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 });
         }
 
-        const { raffleId, name, email, phone, state } = result.data;
+        const { raffleId, name, email, phone, state, utmSource } = result.data;
 
         // Get IP Address
         const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
@@ -124,7 +125,8 @@ export async function POST(req: Request) {
                 phone,
                 state,
                 ipAddress: ip,
-                number: ticketNumber
+                number: ticketNumber,
+                utmSource
             }
         });
 

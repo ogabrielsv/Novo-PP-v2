@@ -11,6 +11,7 @@ interface Ticket {
     state: string | null;
     ipAddress: string | null;
     number: number | null;
+    utmSource: string | null;
     createdAt: string;
 }
 
@@ -83,7 +84,8 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
                             <th className="p-5 font-bold">Email</th>
                             <th className="p-5 font-bold">Telefone</th>
                             <th className="p-5 font-bold">Estado</th>
-                            <th className="p-5 font-bold">Origem</th>
+                            <th className="p-5 font-bold">Origem (IP)</th>
+                            <th className="p-5 font-bold">UTM Source</th>
                             <th className="p-5 font-bold">Campanha</th>
                             <th className="p-5 font-bold">Números da Sorte</th>
                             <th className="p-5 font-bold">Data</th>
@@ -92,7 +94,7 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
                     <tbody className="divide-y divide-stone-800/50">
                         {filteredTickets.length === 0 ? (
                             <tr>
-                                <td colSpan={8} className="p-12 text-center">
+                                <td colSpan={9} className="p-12 text-center">
                                     <div className="flex flex-col items-center gap-3">
                                         <div className="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center text-stone-600">
                                             <Search className="w-6 h-6" />
@@ -115,6 +117,7 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
                                         ) : '-'}
                                     </td>
                                     <td className="p-5 font-mono text-xs text-stone-500">{ticket.ipAddress || 'N/A'}</td>
+                                    <td className="p-5 font-mono text-xs text-stone-500">{ticket.utmSource || '-'}</td>
                                     <td className="p-5 text-white">{raffleName}</td>
                                     <td className="p-5">
                                         <span className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 px-3 py-1 rounded-full text-xs font-bold font-mono">

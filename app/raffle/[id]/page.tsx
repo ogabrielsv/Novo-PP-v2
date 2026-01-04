@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import { ParticipationForm } from './components/ParticipationForm';
@@ -43,13 +44,15 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
             <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden z-10">
 
                 {/* Participation Form */}
-                <ParticipationForm
-                    raffleId={raffle.id}
-                    whatsappUrl={raffle.whatsappUrl}
-                    imageUrl={raffle.imageUrl}
-                    name={raffle.name}
-                    description={raffle.description}
-                />
+                <Suspense fallback={<div className="text-white text-center py-10">Carregando formulário...</div>}>
+                    <ParticipationForm
+                        raffleId={raffle.id}
+                        whatsappUrl={raffle.whatsappUrl}
+                        imageUrl={raffle.imageUrl}
+                        name={raffle.name}
+                        description={raffle.description}
+                    />
+                </Suspense>
 
             </main>
         </div>

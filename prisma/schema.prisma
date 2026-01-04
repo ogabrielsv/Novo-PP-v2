@@ -45,6 +45,7 @@ model Ticket {
   state     String?
   ipAddress String?
   number    Int?
+  utmSource String?
   createdAt DateTime @default(now())
 
   @@index([raffleId])

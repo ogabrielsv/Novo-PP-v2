@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2, Check, X, Shield, Gavel, Gift, Instagram, MessageCircle, RefreshCw } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
 
 interface ParticipationFormProps {
@@ -24,6 +25,8 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
     const [showPrivacy, setShowPrivacy] = useState(false);
     const [showTerms, setShowTerms] = useState(false);
 
+    const searchParams = useSearchParams();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
@@ -35,6 +38,7 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
             email: formData.get('email'),
             phone: formData.get('phone'),
             state: formData.get('state'),
+            utmSource: searchParams.get('utm_source'),
         };
 
         try {
