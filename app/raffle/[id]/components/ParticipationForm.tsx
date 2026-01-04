@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Loader2, Check, X, Shield, Gavel, Gift, Instagram, MessageCircle, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
@@ -26,19 +26,40 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
     const [showTerms, setShowTerms] = useState(false);
 
     const searchParams = useSearchParams();
+    const [utmSource, setUtmSource] = useState('');
+
+    useEffect(() => {
+        // Try to capture from searchParams first (Next.js way)
+        const fromNext = searchParams.get('utm_source');
+        if (fromNext) {
+            setUtmSource(fromNext);
+            return;
+        }
+
+        // Fallback to window.location (Native way)
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const source = params.get('utm_source');
+            if (source) setUtmSource(source);
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
 
         const formData = new FormData(e.currentTarget);
+
+        // Ensure we use the state if form data missed it
+        const currentUtmSource = utmSource || (formData.get('utmSource') as string) || searchParams.get('utm_source');
+
         const data = {
             raffleId,
             name: formData.get('name'),
             email: formData.get('email'),
             phone: formData.get('phone'),
             state: formData.get('state'),
-            utmSource: formData.get('utmSource') || searchParams.get('utm_source'),
+            utmSource: currentUtmSource,
         };
 
         console.log('Enviando dados de participação:', data); // Debug log
@@ -290,7 +311,7 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                         ))}
                     </select>
 
-                    <input type="hidden" name="utmSource" value={searchParams.get('utm_source') || searchParams.get('utm_source') || ''} />
+                    <input type="hidden" name="utmSource" value={utmSource} />
                 </div>
 
                 <div className="space-y-3 pt-2">
@@ -320,6 +341,13 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                         'Participar do Sorteio!'
                     )}
                 </button>
+
+                {/* Debug Info */}
+                {utmSource && (
+                    <div className="text-center">
+                        <p className="text-[10px] text-stone-600 font-mono">Ref: {utmSource}</p>
+                    </div>
+                )}
 
                 <div className="text-center pt-2">
                     <button
