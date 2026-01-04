@@ -74,6 +74,7 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
                 <ParticipationForm
                     raffleId={raffle.id}
                     whatsappUrl={raffle.whatsappUrl}
+                    imageUrl={raffle.imageUrl}
                 />
 
             </main>
