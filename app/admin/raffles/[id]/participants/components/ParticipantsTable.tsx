@@ -28,6 +28,28 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
     // Extract unique UTM sources
     const sources = Array.from(new Set(tickets.map(t => t.utmSource).filter(Boolean))) as string[];
 
+    const formatSourceLabel = (source: string) => {
+        const map: Record<string, string> = {
+            'tiktok': 'TikTok',
+            'instagram': 'Instagram',
+            'facebook': 'Facebook',
+            'whatsapp': 'WhatsApp',
+            'youtube': 'YouTube',
+            'twitter': 'Twitter',
+            'google': 'Google',
+            'linkedin': 'LinkedIn',
+            'telegram': 'Telegram',
+            'instagram_organico': 'Instagram (Orgânico)',
+            'facebook_organico': 'Facebook (Orgânico)',
+            'youtube_organico': 'YouTube (Orgânico)',
+            'twitter_organico': 'Twitter (Orgânico)',
+            'tiktok_organico': 'TikTok (Orgânico)',
+            'google_organico': 'Google (Orgânico)',
+            'bing_organico': 'Bing (Orgânico)',
+        };
+        return map[source.toLowerCase()] || source.charAt(0).toUpperCase() + source.slice(1);
+    };
+
     const filteredTickets = tickets.filter(ticket => {
         const search = searchTerm.toLowerCase();
         const numberFilter = searchNumber.trim();
@@ -81,7 +103,7 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
                         >
                             <option value="all">Todas as origens</option>
                             {sources.map(source => (
-                                <option key={source} value={source}>{source}</option>
+                                <option key={source} value={source}>{formatSourceLabel(source)}</option>
                             ))}
                         </select>
                     </div>
