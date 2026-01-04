@@ -19,7 +19,7 @@ export default function NewRafflePage() {
         whatsappUrl: '',
         articleUrl: '',
         redirectUrl: '',
-        // imageUrl is optional and not in the requested form
+        imageUrl: '',
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -68,6 +68,90 @@ export default function NewRafflePage() {
 
             <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 shadow-xl">
                 <form onSubmit={handleSubmit} className="space-y-6">
+
+                    {/* Imagem de Capa */}
+                    <div className="space-y-4 bg-stone-950/50 p-6 rounded-xl border border-stone-800">
+                        <label className="text-sm font-medium text-stone-300 block">
+                            Imagem de Capa
+                        </label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Preview */}
+                            <div className="relative aspect-video bg-stone-900 rounded-lg border border-stone-800 overflow-hidden flex items-center justify-center group">
+                                {formData.imageUrl ? (
+                                    <>
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={formData.imageUrl}
+                                            alt="Preview"
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setFormData({ ...formData, imageUrl: '' })}
+                                            className="absolute top-2 right-2 p-1.5 bg-red-500/80 hover:bg-red-500 text-white rounded-full transition-colors opacity-0 group-hover:opacity-100"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="text-center p-4">
+                                        <div className="w-12 h-12 bg-stone-800 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <Save className="w-6 h-6 text-stone-600" />
+                                        </div>
+                                        <p className="text-sm text-stone-500">Nenhuma imagem selecionada</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Inputs */}
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-xs text-stone-500 mb-1.5 block">URL da Imagem</label>
+                                    <input
+                                        type="url"
+                                        value={formData.imageUrl}
+                                        onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                                        className="w-full bg-stone-900 border border-stone-800 text-white rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                                        placeholder="https://..."
+                                    />
+                                </div>
+
+                                <div className="relative">
+                                    <div className="absolute inset-0 flex items-center">
+                                        <div className="w-full border-t border-stone-800"></div>
+                                    </div>
+                                    <div className="relative flex justify-center text-xs uppercase">
+                                        <span className="bg-stone-950/50 px-2 text-stone-500">OU</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="text-xs text-stone-500 mb-1.5 block">Carregar do Dispositivo</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                                                    toast.error('A imagem deve ter no máximo 5MB');
+                                                    return;
+                                                }
+                                                const reader = new FileReader();
+                                                reader.onloadend = () => {
+                                                    setFormData({ ...formData, imageUrl: reader.result as string });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }}
+                                        className="w-full text-sm text-stone-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"
+                                    />
+                                    <p className="text-[10px] text-stone-500 mt-1">Recomendado: 1200x630px (Max 5MB)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Nome da Campanha */}
                     <div className="space-y-2">

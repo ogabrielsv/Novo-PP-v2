@@ -45,9 +45,14 @@ export default async function RafflePage({ params }: { params: Promise<{ id: str
                 {/* Header Icon/Image */}
                 <div className="flex flex-col items-center text-center space-y-4 mb-6">
                     {raffle.imageUrl ? (
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-stone-800 mb-2 shadow-xl">
+                        <div className="w-full aspect-video rounded-2xl overflow-hidden border border-stone-800 mb-4 shadow-2xl relative group">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={raffle.imageUrl} alt={raffle.name} className="w-full h-full object-cover" />
+                            <img
+                                src={raffle.imageUrl}
+                                alt={raffle.name}
+                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                            />
                         </div>
                     ) : (
                         <div className="w-20 h-20 bg-stone-900 rounded-full flex items-center justify-center border border-stone-800 text-3xl mb-2 shadow-xl">
