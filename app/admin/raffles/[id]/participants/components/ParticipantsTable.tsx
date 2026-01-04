@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Hash } from 'lucide-react';
+import { Search, Hash, Filter } from 'lucide-react';
 
 interface Ticket {
     id: string;
@@ -23,6 +23,10 @@ interface ParticipantsTableProps {
 export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchNumber, setSearchNumber] = useState('');
+    const [selectedSource, setSelectedSource] = useState('all');
+
+    // Extract unique UTM sources
+    const sources = Array.from(new Set(tickets.map(t => t.utmSource).filter(Boolean))) as string[];
 
     const filteredTickets = tickets.filter(ticket => {
         const search = searchTerm.toLowerCase();
@@ -36,15 +40,16 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
         );
 
         const matchesNumber = numberFilter === '' || numberString.includes(numberFilter);
+        const matchesSource = selectedSource === 'all' || ticket.utmSource === selectedSource;
 
-        return matchesText && matchesNumber;
+        return matchesText && matchesNumber && matchesSource;
     });
 
     return (
         <div className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
             {/* Search / Filter */}
             <div className="p-4 border-b border-stone-800 bg-stone-950/50 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex flex-col sm:flex-row gap-4 w-full md:max-w-3xl">
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:max-w-4xl">
                     <div className="relative flex-1">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
                         <input
@@ -65,6 +70,20 @@ export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProp
                             onChange={(e) => setSearchNumber(e.target.value)}
                             className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-4 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors"
                         />
+                    </div>
+
+                    <div className="relative w-full sm:w-48">
+                        <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+                        <select
+                            value={selectedSource}
+                            onChange={(e) => setSelectedSource(e.target.value)}
+                            className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-8 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors appearance-none cursor-pointer"
+                        >
+                            <option value="all">Todas as origens</option>
+                            {sources.map(source => (
+                                <option key={source} value={source}>{source}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 
