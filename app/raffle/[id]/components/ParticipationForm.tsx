@@ -357,12 +357,7 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                     )}
                 </button>
 
-                {/* Debug Info */}
-                {utmSource && (
-                    <div className="text-center">
-                        <p className="text-[10px] text-stone-600 font-mono">Ref: {utmSource}</p>
-                    </div>
-                )}
+
 
                 <div className="text-center pt-2">
                     <button
