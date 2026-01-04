@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Hash } from 'lucide-react';
 
 interface Ticket {
     id: string;
@@ -21,34 +21,53 @@ interface ParticipantsTableProps {
 
 export function ParticipantsTable({ tickets, raffleName }: ParticipantsTableProps) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchNumber, setSearchNumber] = useState('');
 
     const filteredTickets = tickets.filter(ticket => {
         const search = searchTerm.toLowerCase();
+        const numberFilter = searchNumber.trim();
         const numberString = ticket.number?.toString() || '';
 
-        return (
+        const matchesText = (
             ticket.name.toLowerCase().includes(search) ||
             ticket.email.toLowerCase().includes(search) ||
-            ticket.phone.includes(search) ||
-            numberString.includes(search)
+            ticket.phone.includes(search)
         );
+
+        const matchesNumber = numberFilter === '' || numberString.includes(numberFilter);
+
+        return matchesText && matchesNumber;
     });
 
     return (
         <div className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden shadow-xl">
             {/* Search / Filter */}
-            <div className="p-4 border-b border-stone-800 bg-stone-950/50 flex justify-between items-center gap-4">
-                <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
-                    <input
-                        type="text"
-                        placeholder="Buscar por nome, email, telefone ou número da sorte..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-4 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors"
-                    />
+            <div className="p-4 border-b border-stone-800 bg-stone-950/50 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 w-full md:max-w-3xl">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+                        <input
+                            type="text"
+                            placeholder="Buscar por nome, email ou telefone..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-4 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors"
+                        />
+                    </div>
+
+                    <div className="relative w-full sm:w-48">
+                        <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+                        <input
+                            type="text"
+                            placeholder="Nº da Sorte"
+                            value={searchNumber}
+                            onChange={(e) => setSearchNumber(e.target.value)}
+                            className="w-full bg-stone-900 border border-stone-800 rounded-lg pl-10 pr-4 py-2 text-sm text-stone-300 focus:outline-none focus:border-[#4ADE80] transition-colors"
+                        />
+                    </div>
                 </div>
-                <div className="text-sm text-stone-500">
+
+                <div className="text-sm text-stone-500 whitespace-nowrap">
                     Total: <span className="text-white font-bold">{filteredTickets.length}</span>
                     {filteredTickets.length !== tickets.length && (
                         <span className="ml-1 text-stone-600">(de {tickets.length})</span>
