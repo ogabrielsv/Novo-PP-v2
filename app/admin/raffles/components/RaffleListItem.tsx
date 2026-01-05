@@ -14,6 +14,7 @@ export interface Raffle {
     imageUrl: string | null;
     status: string;
     slug: string;
+    campaignId: number;
     _count: {
         tickets: number;
     };
@@ -27,7 +28,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleCopy = () => {
-        const url = `${window.location.origin}/${raffle.slug}`;
+        const url = `${window.location.origin}/participar?camp=${raffle.campaignId}`;
         navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
     };
@@ -67,6 +68,8 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                     <p className="text-stone-400 text-sm line-clamp-1 mb-1">{raffle.description || 'Sem descrição'}</p>
                     <div className="flex items-center gap-4 text-xs text-stone-500">
                         <span>R$ {raffle.price.toFixed(2)}</span>
+                        <span>•</span>
+                        <span>ID: {raffle.campaignId}</span>
                         <span>•</span>
                         <span>{raffle._count.tickets} ingressos vendidos</span>
                     </div>
