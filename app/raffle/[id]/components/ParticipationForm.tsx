@@ -30,7 +30,9 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
 
     useEffect(() => {
         // 1. Prioridade: Captura UTM da URL (Next.js ou Nativo)
-        const fromNext = searchParams.get('utm_source');
+        // Suporte para utm_source (padrão) e utm (shorthand solicitado)
+        const fromNext = searchParams.get('utm_source') || searchParams.get('utm');
+
         if (fromNext) {
             setUtmSource(fromNext);
             return;
@@ -38,7 +40,8 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
 
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
-            const source = params.get('utm_source');
+            const source = params.get('utm_source') || params.get('utm');
+
             if (source) {
                 setUtmSource(source);
                 return;
