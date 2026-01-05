@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Copy, Check, MessageCircle, Instagram, Facebook } from 'lucide-react';
+import { X, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ShareModalProps {
@@ -11,7 +11,6 @@ interface ShareModalProps {
 }
 
 export function ShareModal({ raffleId, raffleName, onClose }: ShareModalProps) {
-    const [utmSource, setUtmSource] = useState('');
     const [baseUrl, setBaseUrl] = useState('');
     const [copied, setCopied] = useState(false);
 
@@ -19,17 +18,10 @@ export function ShareModal({ raffleId, raffleName, onClose }: ShareModalProps) {
         setBaseUrl(`${window.location.origin}/raffle/${raffleId}`);
     }, [raffleId]);
 
-    const getTrackingUrl = (source?: string) => {
-        const finalSource = source || utmSource;
-        if (!finalSource) return baseUrl;
-        return `${baseUrl}?utm_source=${finalSource.toLowerCase().replace(/\s+/g, '_')}`;
-    };
-
-    const handleCopy = (source?: string) => {
-        const urlToCopy = getTrackingUrl(source);
-        navigator.clipboard.writeText(urlToCopy);
+    const handleCopy = () => {
+        navigator.clipboard.writeText(baseUrl);
         setCopied(true);
-        toast.success(`Link ${source ? `para ${source} ` : ''}copiado!`);
+        toast.success('Link copiado!');
         setTimeout(() => setCopied(false), 2000);
     };
 
@@ -50,51 +42,15 @@ export function ShareModal({ raffleId, raffleName, onClose }: ShareModalProps) {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-sm font-medium text-stone-300 block">Gerar link com rastreio</label>
+                        <label className="text-sm font-medium text-stone-300 block">Link de participação</label>
 
-                        {/* Quick Actions */}
-                        <div className="grid grid-cols-3 gap-3 mb-4">
-                            <button
-                                onClick={() => handleCopy('whatsapp')}
-                                className="flex flex-col items-center gap-2 p-3 bg-stone-800 hover:bg-[#25D366]/20 hover:border-[#25D366]/50 border border-transparent rounded-xl transition-all group"
-                            >
-                                <MessageCircle className="w-5 h-5 text-stone-400 group-hover:text-[#25D366]" />
-                                <span className="text-xs text-stone-400 group-hover:text-white">WhatsApp</span>
-                            </button>
-                            <button
-                                onClick={() => handleCopy('instagram')}
-                                className="flex flex-col items-center gap-2 p-3 bg-stone-800 hover:bg-purple-500/20 hover:border-purple-500/50 border border-transparent rounded-xl transition-all group"
-                            >
-                                <Instagram className="w-5 h-5 text-stone-400 group-hover:text-purple-400" />
-                                <span className="text-xs text-stone-400 group-hover:text-white">Instagram</span>
-                            </button>
-                            <button
-                                onClick={() => handleCopy('facebook')}
-                                className="flex flex-col items-center gap-2 p-3 bg-stone-800 hover:bg-blue-600/20 hover:border-blue-600/50 border border-transparent rounded-xl transition-all group"
-                            >
-                                <Facebook className="w-5 h-5 text-stone-400 group-hover:text-blue-500" />
-                                <span className="text-xs text-stone-400 group-hover:text-white">Facebook</span>
-                            </button>
-                        </div>
-
-                        {/* Custom Input */}
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Ou digite uma origem (ex: email, tiktok)..."
-                                value={utmSource}
-                                onChange={(e) => setUtmSource(e.target.value)}
-                                className="w-full bg-stone-900 border border-stone-800 text-white rounded-lg pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                            />
-                        </div>
-
-                        {/* Preview */}
+                        {/* Link Preview and Copy */}
                         <div className="bg-black/40 rounded-lg p-3 border border-stone-800/50 flex items-center justify-between gap-3 group">
                             <code className="text-xs text-stone-400 truncate flex-1 font-mono">
-                                {getTrackingUrl()}
+                                {baseUrl}
                             </code>
                             <button
-                                onClick={() => handleCopy()}
+                                onClick={handleCopy}
                                 className="p-1.5 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-md transition-colors"
                                 title="Copiar"
                             >
