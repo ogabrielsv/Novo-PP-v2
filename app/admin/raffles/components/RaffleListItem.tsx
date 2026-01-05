@@ -13,6 +13,7 @@ export interface Raffle {
     price: number;
     imageUrl: string | null;
     status: string;
+    slug: string;
     _count: {
         tickets: number;
     };
@@ -22,11 +23,14 @@ interface RaffleListItemProps {
     raffle: Raffle;
 }
 
-import { ShareModal } from './ShareModal';
-
 export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [isDeleting, setIsDeleting] = useState(false);
-    const [showShareModal, setShowShareModal] = useState(false);
+
+    const handleCopy = () => {
+        const url = `${window.location.origin}/${raffle.slug}`;
+        navigator.clipboard.writeText(url);
+        toast.success('Link copiado!');
+    };
 
     const handleDelete = async () => {
         if (!confirm('Tem certeza que deseja excluir esta campanha? Esta ação não pode ser desfeita.')) {
@@ -79,7 +83,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                 {/* Actions */}
                 <div className="flex items-center gap-2 md:pl-4 md:border-l border-stone-800">
                     <button
-                        onClick={() => setShowShareModal(true)}
+                        onClick={handleCopy}
                         className="p-2 text-stone-400 hover:text-green-500 transition-colors relative"
                         title="Copiar Link"
                     >
@@ -101,14 +105,6 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                     </button>
                 </div>
             </div>
-
-            {showShareModal && (
-                <ShareModal
-                    raffleId={raffle.id}
-                    raffleName={raffle.name}
-                    onClose={() => setShowShareModal(false)}
-                />
-            )}
         </>
     );
 }

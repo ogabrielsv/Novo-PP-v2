@@ -50,9 +50,33 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Nome é obrigatório' }, { status: 400 });
         }
 
+        // Generate slug
+        const slugify = (text: string) => {
+            return text
+                .toString()
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
+        };
+
+        let baseSlug = `sorteio-${slugify(name)}`;
+        let slug = baseSlug;
+        let counter = 1;
+
+        while (await prisma.raffle.findUnique({ where: { slug } })) {
+            slug = `${baseSlug}-${counter}`;
+            counter++;
+        }
+
         const raffle = await prisma.raffle.create({
             data: {
                 name,
+                slug,
                 title: title || '',
                 description: description || '',
                 price: price ? parseFloat(price) : 0.0,

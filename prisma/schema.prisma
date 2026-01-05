@@ -22,6 +22,7 @@ model Raffle {
   price       Float
   imageUrl    String?
   status      String   @default("OPEN")
+  slug        String   @unique
   
   responsible String? // Responsável
   startDate   DateTime? // Data de Início
