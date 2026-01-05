@@ -22,9 +22,9 @@ export default async function RaffleSlugPage({ params }: { params: Promise<{ slu
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 py-8 relative overflow-hidden overflow-y-auto">
             {/* Liquid Blue Background */}
-            <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_#3b82f6_0%,_#1d4ed8_50%,_#1e3a8a_100%)] opacity-80"></div>
                 <div className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(59,130,246,0.4)_0%,_transparent_50%)] animate-pulse-slow"></div>
                 <div className="absolute bottom-[-50%] right-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(96,165,250,0.3)_0%,_transparent_50%)] animate-pulse-slower"></div>
@@ -41,7 +41,7 @@ export default async function RaffleSlugPage({ params }: { params: Promise<{ slu
             />
 
             {/* Centered Squeeze Card */}
-            <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden z-10">
+            <main className="w-full max-w-[480px] bg-black rounded-3xl p-5 md:p-8 shadow-2xl relative overflow-hidden z-10">
 
                 {/* Participation Form */}
                 <Suspense fallback={<div className="text-white text-center py-10">Carregando formulário...</div>}>
