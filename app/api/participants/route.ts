@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { Ticket } from '@prisma/client';
 import { mailClient, SENDER_EMAIL, SENDER_NAME } from '@/lib/mail';
+import { addContactToMailtrap } from '@/lib/mailtrap';
 
 // Schema Validation
 const participateSchema = z.object({
@@ -134,6 +135,18 @@ export async function POST(req: Request) {
         // We don't await this to avoid blocking the response, or we can await to ensure it works.
         // Given this is a critical feedback loop, I'll await it but catch errors inside the function so it doesn't fail the request.
         await sendConfirmationEmail(ticket, raffle.name);
+
+        // Add to Mailtrap (Async - Fire and Forget or Await with catch)
+        // User requested: "Chamar essa função logo após o cadastro... Usar try/catch... Não quebrar o cadastro"
+        try {
+            await addContactToMailtrap({
+                email: ticket.email,
+                name: ticket.name,
+                phone: ticket.phone
+            });
+        } catch (mailtrapError) {
+            console.error('Mailtrap integration failed:', mailtrapError);
+        }
 
         return NextResponse.json({ success: true, ticket });
 

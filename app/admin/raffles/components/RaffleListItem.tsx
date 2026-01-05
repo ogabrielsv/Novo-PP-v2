@@ -28,7 +28,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleCopy = () => {
-        const url = `${window.location.origin}/participar?camp=${raffle.campaignId}`;
+        const url = `${window.location.origin}/raffle/${raffle.id}`;
         navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
     };
