@@ -296,7 +296,7 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                         type="text"
                         required
                         placeholder="Nome completo"
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base md:text-sm"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base"
                     />
 
                     <input
@@ -304,7 +304,7 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                         type="email"
                         required
                         placeholder="Seu melhor e-mail"
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base md:text-sm"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base"
                     />
 
                     <input
@@ -314,14 +314,14 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                         placeholder="(DDD) 99999-9999"
                         onChange={handlePhoneChange}
                         maxLength={15}
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base md:text-sm"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base"
                     />
 
                     <select
                         name="state"
                         required
                         defaultValue=""
-                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base md:text-sm appearance-none cursor-pointer"
+                        className="w-full bg-stone-900 border border-stone-800 text-stone-200 placeholder-stone-500 rounded-lg py-3.5 px-4 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 focus:bg-stone-800/80 transition-all text-base appearance-none cursor-pointer"
                     >
                         <option value="" disabled>Selecione seu estado</option>
                         {BRAZIL_STATES.map(state => (
