@@ -9,9 +9,13 @@ interface MailtrapContact {
     email: string;
     name: string;
     phone: string;
+    state?: string;
+    ticket_number?: number | string;
+    raffle_name?: string;
+    utm_source?: string | null;
 }
 
-export async function addContactToMailtrap({ email, name, phone }: MailtrapContact) {
+export async function addContactToMailtrap({ email, name, phone, state, ticket_number, raffle_name, utm_source }: MailtrapContact) {
     console.log(`🚀 [Mailtrap] Starting integration for: ${email}`);
 
     if (!MAILTRAP_API_TOKEN) {
@@ -69,14 +73,20 @@ export async function addContactToMailtrap({ email, name, phone }: MailtrapConta
         }
 
         // 3. Create Contact
-        // We attempt to map name to first/last name as standard fields.
-        // Phone and full name are sent as custom_fields.
-        // If custom fields are not defined in Mailtrap, they might be ignored or cause 422.
-        // To be safe against 422 blocking the whole subscribe, we will primarily send the basics first.
-        // But let's try sending all.
-
         const firstName = name.split(' ')[0] || '';
         const lastName = name.split(' ').slice(1).join(' ') || '';
+
+        // Prepare custom fields
+        // IMPORTANT: These custom fields must be created in the Mailtrap dashboard for them to be saved.
+        const customFields: Record<string, any> = {
+            phone: phone,
+            name: name,
+        };
+
+        if (state) customFields.state = state;
+        if (ticket_number) customFields.ticket_number = String(ticket_number);
+        if (raffle_name) customFields.raffle_name = raffle_name;
+        if (utm_source) customFields.utm_source = utm_source;
 
         const body = {
             contact: {
@@ -84,12 +94,7 @@ export async function addContactToMailtrap({ email, name, phone }: MailtrapConta
                 first_name: firstName,
                 last_name: lastName,
                 list_ids: CACHED_LIST_ID ? [CACHED_LIST_ID] : [],
-                // We send phone in custom_fields. 
-                // Note: You must create 'phone' custom field in Mailtrap dashboard for this to save.
-                custom_fields: {
-                    phone: phone,
-                    name: name
-                }
+                custom_fields: customFields
             }
         };
 
@@ -130,7 +135,7 @@ export async function addContactToMailtrap({ email, name, phone }: MailtrapConta
                 if (!retryRes.ok) {
                     console.error("❌ [Mailtrap] Retry Failed:", retryRes.status, await retryRes.text());
                 } else {
-                    console.log("✅ [Mailtrap] Contact added successfully (Basic Info).");
+                    console.log("✅ [Mailtrap] Contact added successfully (Basic Info). Create custom fields in Mailtrap to fix 422.");
                 }
             } else {
                 console.error("❌ [Mailtrap] Failed:", res.status, errText);

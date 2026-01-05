@@ -142,7 +142,11 @@ export async function POST(req: Request) {
             await addContactToMailtrap({
                 email: ticket.email,
                 name: ticket.name,
-                phone: ticket.phone
+                phone: ticket.phone,
+                state: ticket.state,
+                ticket_number: ticket.number?.toString(),
+                raffle_name: raffle.name,
+                utm_source: ticket.utmSource ?? undefined
             });
         } catch (mailtrapError) {
             console.error('Mailtrap integration failed:', mailtrapError);
