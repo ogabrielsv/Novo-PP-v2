@@ -94,7 +94,7 @@ export async function addContactToMailtrap({ email, name, phone, state, ticket_n
                 first_name: firstName,
                 last_name: lastName,
                 list_ids: CACHED_LIST_ID ? [CACHED_LIST_ID] : [],
-                custom_fields: customFields
+                fields: customFields
             }
         };
 
