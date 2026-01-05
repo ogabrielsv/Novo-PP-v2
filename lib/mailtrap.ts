@@ -1,5 +1,5 @@
 
-export const MAILTRAP_API_TOKEN = process.env.MAILTRAP_TOKEN;
+export const MAILTRAP_API_TOKEN = process.env.MAILTRAP_TOKEN || '1b9e83e81b926fd93d18b4fb4c614bc7';
 
 // In-memory cache for IDs to reduce API calls
 let CACHED_ACCOUNT_ID: string | number | null = null;
@@ -12,8 +12,10 @@ interface MailtrapContact {
 }
 
 export async function addContactToMailtrap({ email, name, phone }: MailtrapContact) {
+    console.log(`🚀 [Mailtrap] Starting integration for: ${email}`);
+
     if (!MAILTRAP_API_TOKEN) {
-        console.warn('MAILTRAP_TOKEN is not defined. Skipping contact creation.');
+        console.error('❌ [Mailtrap] Token MISSING. Check .env.local');
         return;
     }
 
@@ -105,7 +107,7 @@ export async function addContactToMailtrap({ email, name, phone }: MailtrapConta
 
             // Fallback: If 422 (likely due to custom_fields), try again without custom fields
             if (res.status === 422) {
-                console.warn('Mailtrap: 422 Error (likely missing custom fields). Retrying with basic info.', errText);
+                console.warn('⚠️ [Mailtrap] 422 Error (likely missing custom fields). Retrying with basic info.', errText);
 
                 const fallbackBody = {
                     contact: {
@@ -126,18 +128,18 @@ export async function addContactToMailtrap({ email, name, phone }: MailtrapConta
                 });
 
                 if (!retryRes.ok) {
-                    console.error("Mailtrap Retry Failed:", retryRes.status, await retryRes.text());
+                    console.error("❌ [Mailtrap] Retry Failed:", retryRes.status, await retryRes.text());
                 } else {
-                    console.log("Mailtrap: Contact added successfully (Basic Info).");
+                    console.log("✅ [Mailtrap] Contact added successfully (Basic Info).");
                 }
             } else {
-                console.error("Mailtrap Failed:", res.status, errText);
+                console.error("❌ [Mailtrap] Failed:", res.status, errText);
             }
         } else {
-            console.log(`Mailtrap: Contact ${email} added successfully.`);
+            console.log(`✅ [Mailtrap] Contact ${email} added successfully.`);
         }
 
     } catch (e) {
-        console.error("Mailtrap Integration Error:", e);
+        console.error("❌ [Mailtrap] Integration Error:", e);
     }
 }
