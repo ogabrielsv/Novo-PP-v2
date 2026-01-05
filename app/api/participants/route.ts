@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { Ticket } from '@prisma/client';
-import { mailtrapClient, defaultSender } from '@/lib/mailtrap';
+import { mailClient, SENDER_EMAIL, SENDER_NAME } from '@/lib/mail';
 
 // Schema Validation
 const participateSchema = z.object({
@@ -16,9 +16,12 @@ const participateSchema = z.object({
 
 async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
     try {
-        await mailtrapClient.send({
-            from: defaultSender,
-            to: [{ email: ticket.email }],
+        await mailClient.sendMail({
+            from: {
+                address: SENDER_EMAIL,
+                name: SENDER_NAME,
+            },
+            to: [ticket.email],
             subject: `Confirmação de Participação - ${raffleName}`,
             text: `Olá ${ticket.name},\n\nSua participação na campanha "${raffleName}" foi confirmada com sucesso!\n\nSeu Número da Sorte: ${ticket.number?.toString().padStart(4, '0')}\n\nBoa sorte!\nEquipe Play Prêmios`,
             html: `
@@ -33,7 +36,7 @@ async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
                     <p style="color: #666; font-size: 12px;">Equipe Play Prêmios</p>
                 </div>
             `,
-            category: "Participation Confirmation",
+
         });
         console.log(`Confirmation email sent to ${ticket.email}`);
     } catch (e) {
