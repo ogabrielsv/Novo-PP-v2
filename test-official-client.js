@@ -1,46 +1,29 @@
+const { MailtrapClient } = require('mailtrap');
 
-const { MailtrapClient } = require("mailtrap");
-
-// Retrieve token from environment or hardcode for testing (not recommended for production commit)
-// Run this with: MAILTRAP_API_TOKEN=your_token node test-official-client.js
-const TOKEN = process.env.MAILTRAP_API_TOKEN;
-const ENDPOINT = "https://send.api.mailtrap.io/";
+const TOKEN = '1b9e83e81b926fd93d18b4fb4c614bc7';
+const ENDPOINT = 'https://send.api.mailtrap.io/'; // Usually this is default
 
 async function main() {
-    if (!TOKEN) {
-        console.error("Erro: MAILTRAP_API_TOKEN não definida.");
-        console.error("Execute com: set MAILTRAP_API_TOKEN=seu_token && node test-official-client.js (Windows CMD)");
-        console.error("Ou no PowerShell: $env:MAILTRAP_API_TOKEN='seu_token'; node test-official-client.js");
-        process.exit(1);
-    }
-
     const client = new MailtrapClient({ token: TOKEN });
 
-    const sender = {
-        email: "hello@playpremios.com.br",
-        name: "Play Prêmios Teste",
-    };
+    console.log('Testing Mailtrap Official Client...');
 
-    const recipients = [
-        {
-            email: "teste@example.com", // Substitua pelo seu email para ver o resultado real
-        }
-    ];
-
-    console.log("Enviando email de teste com Cliente Oficial Mailtrap...");
+    // 1. Try to list lists to see if we can connect and what lists exist
+    // We don't know the method name for sure, so we print available methods if possible or try common ones.
+    // Actually, Mailtrap client usually separates Sending and General.
+    // Let's try to inspect the client object.
 
     try {
-        const response = await client.send({
-            from: sender,
-            to: recipients,
-            subject: "Teste Oficial Mailtrap API",
-            text: "Isso é um teste usando a biblioteca oficial mailtrap-client.",
-            category: "Integration Test",
-        });
+        // Trying to add a contact using the pattern if it exists on the client
+        // Documentation says: client.marketing.contacts.create(...) or similar?
+        console.log('Client methods:', Object.keys(client));
 
-        console.log("Sucesso!", response);
-    } catch (err) {
-        console.error("Erro ao enviar:", err);
+        // If there is no specific marketing method, we might need to use the 'general' API client or similar.
+        // But let's try a direct request if the client exposes it.
+
+        // Let's try to guess the method or print what we have
+    } catch (e) {
+        console.error(e);
     }
 }
 
