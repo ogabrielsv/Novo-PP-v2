@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, PlayCircle } from 'lucide-react';
+import { PlayCircle } from 'lucide-react';
+
 
 interface StepsModalProps {
     redirectUrl?: string | null;
@@ -41,7 +42,6 @@ export function StepsModal({ redirectUrl, articleUrl }: StepsModalProps) {
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                onClick={handleClose}
             />
 
             {/* Modal */}
@@ -53,12 +53,7 @@ export function StepsModal({ redirectUrl, articleUrl }: StepsModalProps) {
                 <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
                 {/* Close Button */}
-                <button
-                    onClick={handleClose}
-                    className="absolute top-4 right-4 p-2 text-stone-500 hover:text-white transition-colors bg-stone-800/50 hover:bg-stone-800 rounded-full"
-                >
-                    <X className="w-5 h-5" />
-                </button>
+                {/* Close Button Removed */}
 
                 <div className="relative z-10 text-center space-y-6">
                     {/* Icon */}
