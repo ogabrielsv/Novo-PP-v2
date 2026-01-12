@@ -37,6 +37,8 @@ export async function updateRaffle(id: string, formData: FormData) {
     const price = "0.0"; // Free
     const imageUrl = formData.get('imageUrl') as string
     const status = formData.get('status') as string
+    const startDateRaw = formData.get('startDate') as string
+    const endDateRaw = formData.get('endDate') as string
 
     try {
         await prisma.raffle.update({
@@ -47,6 +49,8 @@ export async function updateRaffle(id: string, formData: FormData) {
                 price: parseFloat(price),
                 imageUrl,
                 status: status as 'OPEN' | 'CLOSED',
+                startDate: startDateRaw ? new Date(startDateRaw) : null,
+                endDate: endDateRaw ? new Date(endDateRaw) : null,
             },
         })
     } catch (error) {
@@ -66,6 +70,8 @@ export async function createRaffle(formData: FormData) {
     const description = formData.get('description') as string
     const price = "0.0"; // Free
     const imageUrl = formData.get('imageUrl') as string
+    const startDateRaw = formData.get('startDate') as string
+    const endDateRaw = formData.get('endDate') as string
 
     try {
         await prisma.raffle.create({
@@ -75,6 +81,8 @@ export async function createRaffle(formData: FormData) {
                 price: parseFloat(price),
                 imageUrl,
                 status: 'OPEN',
+                startDate: startDateRaw ? new Date(startDateRaw) : null,
+                endDate: endDateRaw ? new Date(endDateRaw) : null,
             },
         })
     } catch (error) {

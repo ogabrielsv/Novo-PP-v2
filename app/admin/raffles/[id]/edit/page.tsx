@@ -53,17 +53,35 @@ export default async function EditRafflePage({ params }: { params: { id: string 
                     />
                 </div>
 
+                <select
+                    name="status"
+                    defaultValue={raffle.status}
+                    className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                >
+                    <option value="OPEN">Ativo (Open)</option>
+                    <option value="CLOSED">Encerrado (Closed)</option>
+                </select>
+        </div>
+                </div >
+
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-stone-300">Status</label>
-                        <select
-                            name="status"
-                            defaultValue={raffle.status}
-                            className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                        >
-                            <option value="OPEN">Ativo (Open)</option>
-                            <option value="CLOSED">Encerrado (Closed)</option>
-                        </select>
+                        <label className="text-sm font-medium text-stone-300">Data de Início</label>
+                        <input
+                            type="datetime-local"
+                            name="startDate"
+                            defaultValue={raffle.startDate ? new Date(new Date(raffle.startDate).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                            className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent [color-scheme:dark]"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-stone-300">Data do Sorteio</label>
+                        <input
+                            type="datetime-local"
+                            name="endDate"
+                            defaultValue={raffle.endDate ? new Date(new Date(raffle.endDate).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : ''}
+                            className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent [color-scheme:dark]"
+                        />
                     </div>
                 </div>
 
@@ -93,7 +111,7 @@ export default async function EditRafflePage({ params }: { params: { id: string 
                         Salvar Alterações
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }

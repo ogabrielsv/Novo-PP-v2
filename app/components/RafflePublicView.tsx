@@ -41,6 +41,8 @@ export function RafflePublicView({ raffle }: RafflePublicViewProps) {
                         imageUrl={raffle.imageUrl || ''}
                         name={raffle.name}
                         description={raffle.description}
+                        startDate={raffle.startDate ? new Date(raffle.startDate).toISOString() : null}
+                        endDate={raffle.endDate ? new Date(raffle.endDate).toISOString() : null}
                     />
                 </Suspense>
 

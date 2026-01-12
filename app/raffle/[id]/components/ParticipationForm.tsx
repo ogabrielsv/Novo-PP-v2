@@ -12,13 +12,15 @@ interface ParticipationFormProps {
     imageUrl?: string | null;
     name?: string;
     description?: string;
+    startDate?: string | null;
+    endDate?: string | null;
 }
 
 const BRAZIL_STATES = [
     "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
 ];
 
-export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, description }: ParticipationFormProps) {
+export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, description, startDate, endDate }: ParticipationFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState<{ number: string | number } | null>(null);
     const [showRules, setShowRules] = useState(false);
@@ -286,6 +288,11 @@ export function ParticipationForm({ raffleId, whatsappUrl, imageUrl, name, descr
                     <p className="text-stone-400 text-sm px-2 leading-relaxed">
                         {description || "Participe e concorra a este prêmio incrível."}
                     </p>
+                    {endDate && (
+                        <div className="flex items-center justify-center gap-2 text-xs font-medium text-stone-500 bg-stone-900/50 py-1.5 px-3 rounded-full w-fit mx-auto border border-stone-800">
+                            <span>📅 Sorteio: {new Date(endDate).toLocaleDateString('pt-BR')}</span>
+                        </div>
+                    )}
                 </div>
             </div>
 

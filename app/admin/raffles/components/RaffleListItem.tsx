@@ -15,6 +15,7 @@ export interface Raffle {
     status: string;
     slug: string;
     campaignId: number;
+    endDate: Date | null;
     _count: {
         tickets: number;
     };
@@ -72,6 +73,12 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                         <span>ID: {raffle.campaignId}</span>
                         <span>•</span>
                         <span>{raffle._count.tickets} ingressos vendidos</span>
+                        {raffle.endDate && (
+                            <>
+                                <span>•</span>
+                                <span>Sorteio: {new Date(raffle.endDate).toLocaleDateString('pt-BR')}</span>
+                            </>
+                        )}
                     </div>
                 </div>
 
