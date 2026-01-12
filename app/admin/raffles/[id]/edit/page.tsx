@@ -53,16 +53,17 @@ export default async function EditRafflePage({ params }: { params: { id: string 
                     />
                 </div>
 
-                <select
-                    name="status"
-                    defaultValue={raffle.status}
-                    className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                >
-                    <option value="OPEN">Ativo (Open)</option>
-                    <option value="CLOSED">Encerrado (Closed)</option>
-                </select>
-        </div>
-                </div >
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-stone-300">Status</label>
+                    <select
+                        name="status"
+                        defaultValue={raffle.status}
+                        className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    >
+                        <option value="OPEN">Ativo (Open)</option>
+                        <option value="CLOSED">Encerrado (Closed)</option>
+                    </select>
+                </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
