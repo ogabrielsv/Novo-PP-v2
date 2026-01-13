@@ -51,7 +51,16 @@ export default async function RafflesPage() {
                     </div>
                 ) : (
                     raffles.map((raffle) => (
-                        <RaffleListItem key={raffle.id} raffle={raffle as unknown as Raffle} />
+                        <RaffleListItem
+                            key={raffle.id}
+                            raffle={{
+                                ...raffle,
+                                startDate: raffle.startDate?.toISOString() ?? null,
+                                endDate: raffle.endDate?.toISOString() ?? null,
+                                createdAt: raffle.createdAt.toISOString(),
+                                updatedAt: raffle.updatedAt.toISOString(),
+                            }}
+                        />
                     ))
                 )}
             </div>
