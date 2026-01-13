@@ -74,6 +74,19 @@ export async function createRaffle(formData: FormData) {
     const startDateRaw = formData.get('startDate') as string
     const endDateRaw = formData.get('endDate') as string
 
+    // Generate Slug
+    const slug = name
+        .toString()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '') + '-' + Math.floor(Math.random() * 1000); // Append random number for uniqueness
+
+
     try {
         await prisma.raffle.create({
             data: {
@@ -82,6 +95,7 @@ export async function createRaffle(formData: FormData) {
                 price: parseFloat(price),
                 imageUrl,
                 status: 'OPEN',
+                slug,
                 startDate: startDateRaw ? new Date(startDateRaw) : null,
                 endDate: endDateRaw ? new Date(endDateRaw) : null,
                 showVideo: formData.get('showVideo') === 'on',

@@ -143,7 +143,7 @@ export async function POST(req: Request) {
                 email: ticket.email,
                 name: ticket.name,
                 phone: ticket.phone,
-                state: ticket.state,
+                state: ticket.state ?? undefined,
                 ticket_number: ticket.number?.toString(),
                 raffle_name: raffle.name,
                 utm_source: ticket.utmSource ?? undefined
