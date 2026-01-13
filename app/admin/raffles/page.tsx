@@ -6,31 +6,14 @@ import { RaffleListItem, Raffle } from './components/RaffleListItem';
 export const dynamic = 'force-dynamic';
 
 export default async function RafflesPage() {
-    let raffles;
-    try {
-        // Debug: Simplified query to identify the underlying issue
-        const rawRaffles = await prisma.raffle.findMany();
-
-        // Mocking the _count relation to verify if the base query works
-        raffles = rawRaffles.map(r => ({
-            ...r,
-            _count: { tickets: 0 }
-        }));
-
-        /* Original Query - Commented out for debugging
-        raffles = await prisma.raffle.findMany({
-            orderBy: { createdAt: 'desc' },
-            include: {
-                _count: {
-                    select: { tickets: true },
-                },
+    const raffles = await prisma.raffle.findMany({
+        orderBy: { createdAt: 'desc' },
+        include: {
+            _count: {
+                select: { tickets: true },
             },
-        });
-        */
-    } catch (error) {
-        console.error("Error fetching raffles:", error);
-        throw error;
-    }
+        },
+    });
 
     return (
         <div className="space-y-6">
@@ -71,15 +54,7 @@ export default async function RafflesPage() {
                         <RaffleListItem
                             key={raffle.id}
                             raffle={{
-                                id: raffle.id,
-                                name: raffle.name,
-                                description: raffle.description,
-                                price: raffle.price,
-                                imageUrl: raffle.imageUrl,
-                                status: raffle.status,
-                                slug: raffle.slug,
-                                campaignId: raffle.campaignId,
-                                _count: raffle._count,
+                                ...raffle,
                                 startDate: raffle.startDate?.toISOString() ?? null,
                                 endDate: raffle.endDate?.toISOString() ?? null,
                                 createdAt: raffle.createdAt.toISOString(),
