@@ -33,7 +33,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        const url = `https://participe.creatye.com.br/raffle/${raffle.id}`;
+        const url = `https://participe.clipfy.me/raffle/${raffle.id}`;
         navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
         setCopied(true);

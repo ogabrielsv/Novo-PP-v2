@@ -15,7 +15,7 @@ export function ShareModal({ raffleId, raffleName, onClose }: ShareModalProps) {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        setBaseUrl(`https://participe.creatye.com.br/raffle/${raffleId}`);
+        setBaseUrl(`https://participe.clipfy.me/raffle/${raffleId}`);
     }, [raffleId]);
 
     const handleCopy = () => {
