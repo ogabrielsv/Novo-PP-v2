@@ -29,7 +29,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleCopy = () => {
-        const url = `${window.location.origin}/raffle/${raffle.id}`;
+        const url = `https://participe.playpremios.com/raffle/${raffle.id}`;
         navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
     };
