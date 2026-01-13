@@ -51,6 +51,7 @@ export async function updateRaffle(id: string, formData: FormData) {
                 status: status as 'OPEN' | 'CLOSED',
                 startDate: startDateRaw ? new Date(startDateRaw) : null,
                 endDate: endDateRaw ? new Date(endDateRaw) : null,
+                showVideo: formData.get('showVideo') === 'on',
             },
         })
     } catch (error) {
@@ -83,6 +84,7 @@ export async function createRaffle(formData: FormData) {
                 status: 'OPEN',
                 startDate: startDateRaw ? new Date(startDateRaw) : null,
                 endDate: endDateRaw ? new Date(endDateRaw) : null,
+                showVideo: formData.get('showVideo') === 'on',
             },
         })
     } catch (error) {

@@ -14,7 +14,7 @@ async function main() {
 
     try {
         const info = await transport.sendMail({
-            from: '"Play Prêmios" <hello@playpremios.com.br>',
+            from: '"Play Prêmios" <hello@creatye.com.br>',
             to: "teste@example.com",
             subject: "Teste de Integração Mailtrap",
             text: "Funciona! O envio de e-mails está configurado corretamente.",

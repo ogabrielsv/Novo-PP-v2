@@ -97,6 +97,23 @@ export default async function EditRafflePage({ params }: { params: { id: string 
                     />
                 </div>
 
+                <div className="flex items-center gap-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
+                    <input
+                        type="checkbox"
+                        name="showVideo"
+                        defaultChecked={(raffle as any).showVideo ?? true}
+                        className="w-5 h-5 rounded border-stone-600 text-blue-600 focus:ring-blue-600 bg-stone-900"
+                    />
+                    <div>
+                        <label className="text-sm font-medium text-stone-300 block">
+                            Exibir Pop-up de Vídeo
+                        </label>
+                        <p className="text-xs text-stone-500">
+                            Obriga o usuário a assistir um vídeo antes de participar
+                        </p>
+                    </div>
+                </div>
+
                 <div className="pt-4 flex items-center justify-end gap-3">
                     <Link
                         href="/admin/raffles"

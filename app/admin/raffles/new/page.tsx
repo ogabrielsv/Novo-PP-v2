@@ -20,6 +20,7 @@ export default function NewRafflePage() {
         articleUrl: '',
         redirectUrl: '',
         imageUrl: '',
+        showVideo: true,
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -274,6 +275,24 @@ export default function NewRafflePage() {
                             className="w-full bg-stone-950 border border-stone-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                             placeholder="https://..."
                         />
+                    </div>
+
+                    {/* Exibir Vídeo */}
+                    <div className="flex items-center gap-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
+                        <input
+                            type="checkbox"
+                            checked={formData.showVideo}
+                            onChange={(e) => setFormData({ ...formData, showVideo: e.target.checked })}
+                            className="w-5 h-5 rounded border-stone-600 text-blue-600 focus:ring-blue-600 bg-stone-900"
+                        />
+                        <div>
+                            <label className="text-sm font-medium text-stone-300 block">
+                                Exibir Pop-up de Vídeo
+                            </label>
+                            <p className="text-xs text-stone-500">
+                                Obriga o usuário a assistir um vídeo antes de participar
+                            </p>
+                        </div>
                     </div>
 
                     <div className="pt-8 flex justify-end gap-3">

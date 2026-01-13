@@ -42,7 +42,8 @@ export async function POST(req: Request) {
             endDate,
             whatsappUrl,
             articleUrl,
-            redirectUrl
+            redirectUrl,
+            showVideo
         } = body;
 
         // Basic validation
@@ -88,6 +89,7 @@ export async function POST(req: Request) {
                 whatsappUrl: whatsappUrl || '',
                 articleUrl: articleUrl || '',
                 redirectUrl: redirectUrl || '',
+                showVideo: showVideo !== undefined ? showVideo : true,
             }
         });
 

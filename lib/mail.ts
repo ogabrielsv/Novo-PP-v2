@@ -9,5 +9,5 @@ export const mailClient = Nodemailer.createTransport({
     }
 });
 
-export const SENDER_EMAIL = "hello@playpremios.com.br";
+export const SENDER_EMAIL = "hello@creatye.com.br";
 export const SENDER_NAME = "Play Prêmios";

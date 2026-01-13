@@ -25,10 +25,12 @@ export function RafflePublicView({ raffle }: RafflePublicViewProps) {
             <EmojiRain />
 
             {/* Steps Modal */}
-            <StepsModal
-                redirectUrl={raffle.redirectUrl || ''}
-                articleUrl={raffle.articleUrl || ''}
-            />
+            {((raffle as any).showVideo !== false) && (
+                <StepsModal
+                    redirectUrl={raffle.redirectUrl || ''}
+                    articleUrl={raffle.articleUrl || ''}
+                />
+            )}
 
             {/* Centered Squeeze Card */}
             <main className="w-full max-w-[480px] bg-black rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden z-10">

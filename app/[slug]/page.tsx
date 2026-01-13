@@ -35,10 +35,12 @@ export default async function RaffleSlugPage({ params }: { params: Promise<{ slu
             <EmojiRain />
 
             {/* Steps Modal */}
-            <StepsModal
-                redirectUrl={(raffle as any).redirectUrl}
-                articleUrl={(raffle as any).articleUrl}
-            />
+            {((raffle as any).showVideo !== false) && (
+                <StepsModal
+                    redirectUrl={(raffle as any).redirectUrl}
+                    articleUrl={(raffle as any).articleUrl}
+                />
+            )}
 
             {/* Centered Squeeze Card */}
             <main className="w-full max-w-[480px] bg-black rounded-3xl p-5 md:p-8 shadow-2xl relative overflow-hidden z-10">
