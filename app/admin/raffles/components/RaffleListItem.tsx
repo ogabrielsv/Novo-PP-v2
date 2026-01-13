@@ -27,11 +27,14 @@ interface RaffleListItemProps {
 
 export function RaffleListItem({ raffle }: RaffleListItemProps) {
     const [isDeleting, setIsDeleting] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
         const url = `https://participe.playpremios.com/raffle/${raffle.id}`;
         navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     const handleDelete = async () => {
@@ -94,10 +97,16 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                 <div className="flex items-center gap-2 md:pl-4 md:border-l border-stone-800">
                     <button
                         onClick={handleCopy}
-                        className="p-2 text-stone-400 hover:text-green-500 transition-colors relative"
+                        className="p-2 text-stone-400 hover:text-green-500 transition-colors relative group/btn"
                         title="Copiar Link"
                     >
                         <LinkIcon className="w-4 h-4" />
+                        {copied && (
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-green-500 text-black text-[10px] font-bold rounded shadow-lg animate-in fade-in zoom-in duration-200 whitespace-nowrap pointer-events-none z-50">
+                                Copiado!
+                                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-green-500 rotate-45"></div>
+                            </div>
+                        )}
                     </button>
                     <Link href={`/admin/raffles/${raffle.id}/participants`} className="p-2 text-stone-400 hover:text-green-500 transition-colors" title="Participantes">
                         <Users className="w-4 h-4" />
