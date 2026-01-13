@@ -6,14 +6,20 @@ import { RaffleListItem, Raffle } from './components/RaffleListItem';
 export const dynamic = 'force-dynamic';
 
 export default async function RafflesPage() {
-    const raffles = await prisma.raffle.findMany({
-        orderBy: { createdAt: 'desc' },
-        include: {
-            _count: {
-                select: { tickets: true },
+    let raffles;
+    try {
+        raffles = await prisma.raffle.findMany({
+            orderBy: { createdAt: 'desc' },
+            include: {
+                _count: {
+                    select: { tickets: true },
+                },
             },
-        },
-    });
+        });
+    } catch (error) {
+        console.error("Error fetching raffles:", error);
+        throw error;
+    }
 
     return (
         <div className="space-y-6">
