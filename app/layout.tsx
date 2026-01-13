@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PlayPrêmios",
-  description: "Sistema de Rifas",
+  description: "Play Prêmios: Participe de sorteios gratuitos!",
 };
 
 export default function RootLayout({

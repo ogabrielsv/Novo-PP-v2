@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             description: raffle.description || 'Participe do sorteio!',
             images: [
                 {
-                    url: 'https://participe.clipfy.me/share-image.png',
+                    url: 'https://i.imgur.com/UhiADKk.png',
                     width: 1200,
                     height: 630,
                     alt: 'Sorteio',
