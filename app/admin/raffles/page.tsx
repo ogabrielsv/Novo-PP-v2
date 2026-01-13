@@ -54,7 +54,15 @@ export default async function RafflesPage() {
                         <RaffleListItem
                             key={raffle.id}
                             raffle={{
-                                ...raffle,
+                                id: raffle.id,
+                                name: raffle.name,
+                                description: raffle.description,
+                                price: raffle.price,
+                                imageUrl: raffle.imageUrl,
+                                status: raffle.status,
+                                slug: raffle.slug,
+                                campaignId: raffle.campaignId,
+                                _count: raffle._count,
                                 startDate: raffle.startDate?.toISOString() ?? null,
                                 endDate: raffle.endDate?.toISOString() ?? null,
                                 createdAt: raffle.createdAt.toISOString(),
