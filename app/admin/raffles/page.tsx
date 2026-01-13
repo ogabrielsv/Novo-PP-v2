@@ -8,6 +8,16 @@ export const dynamic = 'force-dynamic';
 export default async function RafflesPage() {
     let raffles;
     try {
+        // Debug: Simplified query to identify the underlying issue
+        const rawRaffles = await prisma.raffle.findMany();
+
+        // Mocking the _count relation to verify if the base query works
+        raffles = rawRaffles.map(r => ({
+            ...r,
+            _count: { tickets: 0 }
+        }));
+
+        /* Original Query - Commented out for debugging
         raffles = await prisma.raffle.findMany({
             orderBy: { createdAt: 'desc' },
             include: {
@@ -16,6 +26,7 @@ export default async function RafflesPage() {
                 },
             },
         });
+        */
     } catch (error) {
         console.error("Error fetching raffles:", error);
         throw error;
