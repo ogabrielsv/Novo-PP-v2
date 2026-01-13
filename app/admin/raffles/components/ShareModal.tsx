@@ -15,7 +15,7 @@ export function ShareModal({ raffleId, raffleName, onClose }: ShareModalProps) {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        setBaseUrl(`https://participe.playpremios.com/raffle/${raffleId}`);
+        setBaseUrl(`https://participante.playpremios.com/raffle/${raffleId}`);
     }, [raffleId]);
 
     const handleCopy = () => {
