@@ -30,6 +30,7 @@ model Raffle {
   whatsappUrl String? // Link do Grupo
   articleUrl  String? // Link do Artigo
   redirectUrl String? // Link de Redirecionamento
+  showVideo   Boolean @default(true) // Exibir vídeo de anúncio
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
