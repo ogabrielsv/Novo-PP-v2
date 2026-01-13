@@ -519,7 +519,7 @@ Monitoramento contínuo e práticas de segurança da informação
 
 Para dúvidas, solicitações ou exercício de direitos relacionados à LGPD:
 
-E-mail: contato@playpremios.com
+E-mail: contato@creatye.com.br
 
 Horário de atendimento: Segunda a sexta, das 9h às 18h
 
@@ -696,9 +696,9 @@ Estes Termos são regidos pelas leis brasileiras. Fica eleito o foro da comarca 
 
 13. CONTATO
 
-E-mail: contato@playpremios.com
+E-mail: contato@creatye.com.br
 
-Encarregado de Dados (DPO): contato@playpremios.com
+Encarregado de Dados (DPO): contato@creatye.com.br
 
 © 2026 Play Prêmios – Plataforma de Sorteios Online.
 Todos os direitos reservados.`}
