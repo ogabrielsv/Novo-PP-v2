@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Gift, Users, Edit, Trash2, Check } from 'lucide-react';
+import { Gift, Link as LinkIcon, Users, Edit, Trash2, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { deleteRaffle } from '@/app/admin/raffles/actions';
 
@@ -103,7 +103,7 @@ export function RaffleListItem({ raffle }: RaffleListItemProps) {
                         className="p-2 text-stone-400 hover:text-green-500 transition-colors relative group/btn"
                         title="Copiar Link"
                     >
-                        <img src="https://i.imgur.com/UhiADKk.png" className="w-4 h-4" alt="Copiar Link" />
+                        <LinkIcon className="w-4 h-4" />
                         {copied && (
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-green-500 text-black text-[10px] font-bold rounded shadow-lg animate-in fade-in zoom-in duration-200 whitespace-nowrap pointer-events-none z-50">
                                 Copiado!
