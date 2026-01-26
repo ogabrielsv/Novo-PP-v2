@@ -1,6 +1,6 @@
 import { MailtrapClient } from "mailtrap";
 
-export const MAILTRAP_API_TOKEN = process.env.MAILTRAP_TOKEN || '1b9e83e81b926fd93d18b4fb4c614bc7';
+export const MAILTRAP_API_TOKEN = process.env.MAILTRAP_TOKEN || 'b7752732ab38d3c28c82a3029672f8d4';
 const client = new MailtrapClient({ token: MAILTRAP_API_TOKEN });
 
 export async function sendMail({ to, name, subject, text, html }: { to: string, name: string, subject: string, text: string, html: string }) {
