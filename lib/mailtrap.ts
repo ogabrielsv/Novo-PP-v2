@@ -5,7 +5,7 @@ const client = new MailtrapClient({ token: MAILTRAP_API_TOKEN });
 
 export async function sendMail({ to, name, subject, text, html }: { to: string, name: string, subject: string, text: string, html: string }) {
     const sender = {
-        email: process.env.SMTP_FROM_EMAIL || "hello@creatye.com.br",
+        email: process.env.SMTP_FROM_EMAIL || "hello@creatye.com",
         name: "Play Prêmios",
     };
     const recipients = [
