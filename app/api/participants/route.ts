@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { Ticket } from '@prisma/client';
-import { sendMail, addContactToMailtrap } from '@/lib/mailtrap';
+import { addContactToMailtrap } from '@/lib/mailtrap';
+import { sendConfirmationEmail } from '@/lib/email-service';
+import { Client } from "@upstash/qstash";
 // import { mailClient, SENDER_EMAIL, SENDER_NAME } from '@/lib/mail'; // Not used anymore for this route
 
 // Schema Validation
@@ -15,32 +17,7 @@ const participateSchema = z.object({
     utmSource: z.string().optional().nullable(),
 });
 
-async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
-    console.log(`[Email Service] Starting confirmation email for ${ticket.email} (Raffle: ${raffleName})`);
-    try {
-        await sendMail({
-            to: ticket.email,
-            name: ticket.name,
-            subject: `Confirmação de Participação - ${raffleName}`,
-            text: `Olá ${ticket.name},\n\nSua participação na campanha "${raffleName}" foi confirmada com sucesso!\n\nSeu Número da Sorte: ${ticket.number?.toString().padStart(4, '0')}\n\nBoa sorte!\nEquipe Play Prêmios`,
-            html: `
-                <div style="font-family: sans-serif; padding: 20px;">
-                    <h2>Olá ${ticket.name},</h2>
-                    <p>Sua participação na campanha <strong>${raffleName}</strong> foi confirmada com sucesso!</p>
-                    <div style="background: #f0fdf4; border: 1px solid #22c55e; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
-                        <p style="margin: 0; color: #15803d; font-size: 14px;">Seu Número da Sorte</p>
-                        <p style="margin: 5px 0 0 0; color: #166534; font-size: 24px; font-weight: bold;">${ticket.number?.toString().padStart(4, '0')}</p>
-                    </div>
-                    <p>Boa sorte!</p>
-                    <p style="color: #666; font-size: 12px;">Equipe Play Prêmios</p>
-                </div>
-            `
-        });
-        console.log(`Confirmation email sent via API to ${ticket.email}`);
-    } catch (e) {
-        console.error('Failed to send email via API:', e);
-    }
-}
+
 
 export async function POST(req: Request) {
     try {
@@ -128,10 +105,31 @@ export async function POST(req: Request) {
             }
         });
 
-        // Send Confirmation Email
-        // We don't await this to avoid blocking the response, or we can await to ensure it works.
-        // Given this is a critical feedback loop, I'll await it but catch errors inside the function so it doesn't fail the request.
-        await sendConfirmationEmail(ticket, raffle.name);
+        // Send Confirmation Email with 1 minute delay via QStash
+        const qstashToken = process.env.QSTASH_TOKEN;
+
+        if (qstashToken) {
+            console.log(`[Email Service] Scheduling confirmation email for ${ticket.email} in 60 seconds via QStash...`);
+            const client = new Client({ token: qstashToken });
+            // Determine app URL (Vercel automatic URL or custom domain)
+            // Note: In production Vercel, you should set NEXT_PUBLIC_APP_URL to your production domain.
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+            try {
+                await client.publishJSON({
+                    url: `${appUrl}/api/jobs/send-email`,
+                    body: { ticket, raffleName: raffle.name },
+                    delay: 60, // 60 seconds delay
+                });
+            } catch (qError) {
+                console.error('Failed to schedule email with QStash:', qError);
+                // Fallback to sending immediately if scheduling fails
+                await sendConfirmationEmail(ticket, raffle.name);
+            }
+        } else {
+            console.warn("QSTASH_TOKEN not found. Sending email immediately (no delay).");
+            await sendConfirmationEmail(ticket, raffle.name);
+        }
 
         // Add to Mailtrap (Async - Fire and Forget or Await with catch)
         // User requested: "Chamar essa função logo após o cadastro... Usar try/catch... Não quebrar o cadastro"
