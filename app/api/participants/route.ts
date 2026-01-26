@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { z } from 'zod';
 import { Ticket } from '@prisma/client';
-import { mailClient, SENDER_EMAIL, SENDER_NAME } from '@/lib/mail';
-import { addContactToMailtrap } from '@/lib/mailtrap';
+import { sendMail, addContactToMailtrap } from '@/lib/mailtrap';
+// import { mailClient, SENDER_EMAIL, SENDER_NAME } from '@/lib/mail'; // Not used anymore for this route
 
 // Schema Validation
 const participateSchema = z.object({
@@ -17,12 +17,9 @@ const participateSchema = z.object({
 
 async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
     try {
-        await mailClient.sendMail({
-            from: {
-                address: SENDER_EMAIL,
-                name: SENDER_NAME,
-            },
-            to: [ticket.email],
+        await sendMail({
+            to: ticket.email,
+            name: ticket.name,
             subject: `Confirmação de Participação - ${raffleName}`,
             text: `Olá ${ticket.name},\n\nSua participação na campanha "${raffleName}" foi confirmada com sucesso!\n\nSeu Número da Sorte: ${ticket.number?.toString().padStart(4, '0')}\n\nBoa sorte!\nEquipe Play Prêmios`,
             html: `
@@ -36,12 +33,11 @@ async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
                     <p>Boa sorte!</p>
                     <p style="color: #666; font-size: 12px;">Equipe Play Prêmios</p>
                 </div>
-            `,
-
+            `
         });
-        console.log(`Confirmation email sent to ${ticket.email}`);
+        console.log(`Confirmation email sent via API to ${ticket.email}`);
     } catch (e) {
-        console.error('Failed to send email:', e);
+        console.error('Failed to send email via API:', e);
     }
 }
 

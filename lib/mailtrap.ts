@@ -1,5 +1,35 @@
+import { MailtrapClient } from "mailtrap";
 
 export const MAILTRAP_API_TOKEN = process.env.MAILTRAP_TOKEN || '1b9e83e81b926fd93d18b4fb4c614bc7';
+const client = new MailtrapClient({ token: MAILTRAP_API_TOKEN });
+
+export async function sendMail({ to, name, subject, text, html }: { to: string, name: string, subject: string, text: string, html: string }) {
+    const sender = {
+        email: process.env.SMTP_FROM_EMAIL || "hello@creatye.com.br",
+        name: "Play Prêmios",
+    };
+    const recipients = [
+        {
+            email: to,
+        }
+    ];
+
+    try {
+        const result = await client.send({
+            from: sender,
+            to: recipients,
+            subject,
+            text,
+            html,
+            category: "Raffle Participation",
+        });
+        console.log(`✅ [Mailtrap API] Email sent to ${to}:`, result);
+        return result;
+    } catch (error) {
+        console.error("❌ [Mailtrap API] Sending Error:", error);
+        throw error;
+    }
+}
 
 // In-memory cache for IDs to reduce API calls
 let CACHED_ACCOUNT_ID: string | number | null = null;
