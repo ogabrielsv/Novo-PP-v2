@@ -16,6 +16,7 @@ const participateSchema = z.object({
 });
 
 async function sendConfirmationEmail(ticket: Ticket, raffleName: string) {
+    console.log(`[Email Service] Starting confirmation email for ${ticket.email} (Raffle: ${raffleName})`);
     try {
         await sendMail({
             to: ticket.email,
