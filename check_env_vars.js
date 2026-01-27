@@ -13,7 +13,10 @@ try {
             SMTP_HOST: false,
             SMTP_USER: false,
             SMTP_PASS: false,
-            SMTP_PORT: false
+            SMTP_PORT: false,
+            QSTASH_TOKEN: false,
+            QSTASH_CURRENT_SIGNING_KEY: false,
+            QSTASH_NEXT_SIGNING_KEY: false
         };
 
         lines.forEach(line => {
