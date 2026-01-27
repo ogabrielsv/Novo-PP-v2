@@ -109,26 +109,38 @@ export async function POST(req: Request) {
         const qstashToken = process.env.QSTASH_TOKEN;
 
         if (qstashToken) {
-            console.log(`[Email Service] Scheduling confirmation email for ${ticket.email} in 60 seconds via QStash...`);
             const client = new Client({ token: qstashToken });
             // Determine app URL (Vercel automatic URL or custom domain)
-            // Note: In production Vercel, you should set NEXT_PUBLIC_APP_URL to your production domain.
             const appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
-            try {
-                await client.publishJSON({
-                    url: `${appUrl}/api/jobs/send-email`,
-                    body: { ticket, raffleName: raffle.name },
-                    delay: 60, // 60 seconds delay (confirmed active)
-                });
-            } catch (qError) {
-                console.error('Failed to schedule email with QStash:', qError);
-                // Fallback to local 60s delay (Fire-and-forget)
+            // Check if running on localhost (QStash cannot call localhost)
+            const isLocalhost = appUrl.includes('localhost') || appUrl.includes('127.0.0.1');
+
+            if (isLocalhost) {
+                console.log(`[Email Service] Running on localhost (${appUrl}). Skipping QStash and using local delay.`);
+                // Local 60s delay (Fire-and-forget)
                 (async () => {
-                    console.log(`[Email Service] Fallback: Waiting 60 seconds locally before sending to ${ticket.email}...`);
+                    console.log(`[Email Service] Local: Waiting 60 seconds locally before sending to ${ticket.email}...`);
                     await new Promise(resolve => setTimeout(resolve, 60000));
                     await sendConfirmationEmail(ticket, raffle.name);
-                })().catch(err => console.error('Fallback email error:', err));
+                })().catch(err => console.error('Local email error:', err));
+            } else {
+                console.log(`[Email Service] Scheduling confirmation email for ${ticket.email} in 60 seconds via QStash...`);
+                try {
+                    await client.publishJSON({
+                        url: `${appUrl}/api/jobs/send-email`,
+                        body: { ticket, raffleName: raffle.name },
+                        delay: 60, // 60 seconds delay (confirmed active)
+                    });
+                } catch (qError) {
+                    console.error('Failed to schedule email with QStash:', qError);
+                    // Fallback to local 60s delay (Fire-and-forget)
+                    (async () => {
+                        console.log(`[Email Service] Fallback: Waiting 60 seconds locally before sending to ${ticket.email}...`);
+                        await new Promise(resolve => setTimeout(resolve, 60000));
+                        await sendConfirmationEmail(ticket, raffle.name);
+                    })().catch(err => console.error('Fallback email error:', err));
+                }
             }
         } else {
             console.warn("QSTASH_TOKEN not found. Using local execution with 1 minute delay.");
