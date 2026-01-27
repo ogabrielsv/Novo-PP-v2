@@ -123,12 +123,21 @@ export async function POST(req: Request) {
                 });
             } catch (qError) {
                 console.error('Failed to schedule email with QStash:', qError);
-                // Fallback to sending immediately if scheduling fails
-                await sendConfirmationEmail(ticket, raffle.name);
+                // Fallback to local 60s delay (Fire-and-forget)
+                (async () => {
+                    console.log(`[Email Service] Fallback: Waiting 60 seconds locally before sending to ${ticket.email}...`);
+                    await new Promise(resolve => setTimeout(resolve, 60000));
+                    await sendConfirmationEmail(ticket, raffle.name);
+                })().catch(err => console.error('Fallback email error:', err));
             }
         } else {
-            console.warn("QSTASH_TOKEN not found. Sending email immediately (no delay).");
-            await sendConfirmationEmail(ticket, raffle.name);
+            console.warn("QSTASH_TOKEN not found. Using local execution with 1 minute delay.");
+            // Fallback to local 60s delay (Fire-and-forget)
+            (async () => {
+                console.log(`[Email Service] Local: Waiting 60 seconds locally before sending to ${ticket.email}...`);
+                await new Promise(resolve => setTimeout(resolve, 60000));
+                await sendConfirmationEmail(ticket, raffle.name);
+            })().catch(err => console.error('Local email error:', err));
         }
 
         // Add to Mailtrap (Async - Fire and Forget or Await with catch)
