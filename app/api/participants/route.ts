@@ -137,13 +137,16 @@ export async function POST(req: Request) {
                 })();
             } else {
                 // Production: Use QStash
-                console.log(`[Email Service] Scheduling confirmation email for ${ticket.email} in 60 seconds via QStash...`);
+                const targetUrl = `${appUrl}/api/jobs/send-email`;
+                console.log(`[Email Service] Attempting to schedule QStash job to: ${targetUrl}`);
+
                 try {
-                    await client.publishJSON({
-                        url: `${appUrl}/api/jobs/send-email`,
+                    const result = await client.publishJSON({
+                        url: targetUrl,
                         body: { ticket, raffleName: raffle.name },
                         delay: 60, // 60 seconds delay (confirmed active)
                     });
+                    console.log(`[Email Service] QStash job scheduled successfully! ID: ${result.messageId}`);
                 } catch (qError) {
                     console.error('Failed to schedule email with QStash:', qError);
                     // Fallback to local 60s delay (Fire-and-forget)
