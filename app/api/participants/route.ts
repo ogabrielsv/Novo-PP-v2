@@ -110,9 +110,13 @@ export async function POST(req: Request) {
 
         if (qstashToken) {
             const client = new Client({ token: qstashToken });
-            // Determine app URL (Vercel automatic URL or custom domain)
-            let appUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-            appUrl = appUrl.replace(/\/$/, ''); // Remove trailing slash if present
+            // Determine app URL dynamically based on request host
+            // This ensures QStash calls back the correct domain (e.g. participe.creatye.com.br)
+            const protocol = req.headers.get('x-forwarded-proto') || 'https';
+            const host = req.headers.get('host');
+
+            let appUrl = host ? `${protocol}://${host}` : (process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'));
+            appUrl = appUrl.replace(/\/$/, ''); // Remove trailing slash
 
             // Check if running explicitly on localhost to force local delay for testing
             // This ensures dev testing works even if valid QStash keys are present
