@@ -109,7 +109,10 @@ export async function POST(req: Request) {
         const qstashToken = process.env.QSTASH_TOKEN;
 
         if (qstashToken) {
-            const client = new Client({ token: qstashToken });
+            const client = new Client({
+                token: qstashToken,
+                baseUrl: process.env.QSTASH_URL // Should default safely if undefined, but explicit is better if env provided
+            });
             // Determine app URL dynamically based on request host
             // This ensures QStash calls back the correct domain (e.g. participe.creatye.com.br)
             const protocol = req.headers.get('x-forwarded-proto') || 'https';
