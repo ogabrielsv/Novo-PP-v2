@@ -119,7 +119,7 @@ export async function POST(req: Request) {
                 await client.publishJSON({
                     url: `${appUrl}/api/jobs/send-email`,
                     body: { ticket, raffleName: raffle.name },
-                    delay: 60, // 60 seconds delay
+                    delay: 60, // 60 seconds delay (confirmed active)
                 });
             } catch (qError) {
                 console.error('Failed to schedule email with QStash:', qError);
