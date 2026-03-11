@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+}
+
+model Raffle {
+  id          String   @id @default(uuid())
+  name        String
+  title       String? // Titulo
+  description String
+  price       Float
+  imageUrl    String?
+  status      String   @default("OPEN")
+  slug        String   @unique
+  
+  responsible String? // Responsável
+  startDate   DateTime? // Data de Início
+  endDate     DateTime? // Data de Expiração
+  whatsappUrl String? // Link do Grupo
+  articleUrl  String? // Link do Artigo
+  redirectUrl String? // Link de Redirecionamento
+  showVideo   Boolean @default(true) // Exibir vídeo de anúncio
+  showProgressBar Boolean @default(false) // Exibir barra de progresso
+  progressBarValue Int @default(0) // Valor percentual da barra (0-100)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tickets     Ticket[]
+  campaignId  Int      @unique @default(autoincrement())
+}
+
+model Ticket {
+  id        String   @id @default(uuid())
+  raffleId  String
+  raffle    Raffle   @relation(fields: [raffleId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String
+  state     String?
+  ipAddress String?
+  number    Int?
+  utmSource String?
+  createdAt DateTime @default(now())
+
+  @@index([raffleId])
+}
